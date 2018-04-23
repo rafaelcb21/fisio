@@ -141,7 +141,6 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
     }
 
   estimativaDistanciaTC6M() {
-    print(this.value);
     if(this.value == 'Homem') {
       var numero = 
         (7.57 * double.parse(_controllerAltura.text.replaceAll(',', '.'))) -
