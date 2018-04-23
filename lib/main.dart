@@ -47,161 +47,86 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
   FocusNode _focusNodeBorgMMIIRepouso = new FocusNode();
   FocusNode _focusNodeOxigenioRepouso = new FocusNode();
 
-  final TextEditingController _controllerNome = new TextEditingController();
-  final TextEditingController _controllerIdade = new TextEditingController();
-  final TextEditingController _controllerPeso = new TextEditingController();
-  final TextEditingController _controllerAltura = new TextEditingController();
-  final TextEditingController _controllerPimax = new TextEditingController();
-  final TextEditingController _controllerPemax = new TextEditingController();
+  FocusNode _focusNodeFC3min = new FocusNode();
+  FocusNode _focusNodeFR3min = new FocusNode();
+  FocusNode _focusNodeSpO23min = new FocusNode();
+  FocusNode _focusNodePA3min = new FocusNode();
+  FocusNode _focusNodeBorgD3min = new FocusNode();
+  FocusNode _focusNodeBorgMMII3min = new FocusNode();
+  FocusNode _focusNodeOxigenio3min = new FocusNode();
 
-  final TextEditingController _controllerFCRepouso = new TextEditingController();
-  final TextEditingController _controllerFRRepouso = new TextEditingController();
-  final TextEditingController _controllerSpO2Repouso = new TextEditingController();
-  final TextEditingController _controllerPARepouso = new TextEditingController();
-  final TextEditingController _controllerBorgDRepouso = new TextEditingController();
-  final TextEditingController _controllerBorgMMIIRepouso = new TextEditingController();
-  final TextEditingController _controllerOxigenioRepouso = new TextEditingController();
+  FocusNode _focusNodeFC6min = new FocusNode();
+  FocusNode _focusNodeFR6min = new FocusNode();
+  FocusNode _focusNodeSpO26min = new FocusNode();
+  FocusNode _focusNodePA6min = new FocusNode();
+  FocusNode _focusNodeBorgD6min = new FocusNode();
+  FocusNode _focusNodeBorgMMII6min = new FocusNode();
+  FocusNode _focusNodeOxigenio6min = new FocusNode();
+
+  FocusNode _focusNodeFCRepouso2min = new FocusNode();
+  FocusNode _focusNodeFRRepouso2min = new FocusNode();
+  FocusNode _focusNodeSpO2Repouso2min = new FocusNode();
+  FocusNode _focusNodePARepouso2min = new FocusNode();
+  FocusNode _focusNodeBorgDRepouso2min = new FocusNode();
+  FocusNode _focusNodeBorgMMIIRepouso2min = new FocusNode();
+  FocusNode _focusNodeOxigenioRepouso2min = new FocusNode();
+
+
+
+  TextEditingController _controllerNome = new TextEditingController();
+  TextEditingController _controllerIdade = new TextEditingController();
+  TextEditingController _controllerPeso = new TextEditingController();
+  TextEditingController _controllerAltura = new TextEditingController();
+  TextEditingController _controllerPimax = new TextEditingController();
+  TextEditingController _controllerPemax = new TextEditingController();
+
+  TextEditingController _controllerFCRepouso = new TextEditingController();
+  TextEditingController _controllerFRRepouso = new TextEditingController();
+  TextEditingController _controllerSpO2Repouso = new TextEditingController();
+  TextEditingController _controllerPARepouso = new TextEditingController();
+  TextEditingController _controllerBorgDRepouso = new TextEditingController();
+  TextEditingController _controllerBorgMMIIRepouso = new TextEditingController();
+  TextEditingController _controllerOxigenioRepouso = new TextEditingController();
+
+  TextEditingController _controllerFC3min = new TextEditingController();
+  TextEditingController _controllerFR3min = new TextEditingController();
+  TextEditingController _controllerSpO23min = new TextEditingController();
+  TextEditingController _controllerPA3min = new TextEditingController();
+  TextEditingController _controllerBorgD3min = new TextEditingController();
+  TextEditingController _controllerBorgMMII3min = new TextEditingController();
+  TextEditingController _controllerOxigenio3min = new TextEditingController();
+
+  TextEditingController _controllerFC6min = new TextEditingController();
+  TextEditingController _controllerFR6min = new TextEditingController();
+  TextEditingController _controllerSpO26min = new TextEditingController();
+  TextEditingController _controllerPA6min = new TextEditingController();
+  TextEditingController _controllerBorgD6min = new TextEditingController();
+  TextEditingController _controllerBorgMMII6min = new TextEditingController();
+  TextEditingController _controllerOxigenio6min = new TextEditingController();
+
+  TextEditingController _controllerFCRepouso2min = new TextEditingController();
+  TextEditingController _controllerFRRepouso2min = new TextEditingController();
+  TextEditingController _controllerSpO2Repouso2min = new TextEditingController();
+  TextEditingController _controllerPARepouso2min = new TextEditingController();
+  TextEditingController _controllerBorgDRepouso2min = new TextEditingController();
+  TextEditingController _controllerBorgMMIIRepouso2min = new TextEditingController();
+  TextEditingController _controllerOxigenioRepouso2min = new TextEditingController();
+
+
 
   String value = "Homem";
   String _valueTextNormalPimax = '';
   String _valueTextNormalPemax = '';
   bool _customIndicator = false;
-  List<DemoItem<dynamic>> _demoItems;
+
+  
 
   @override
   void initState() {
     super.initState();
-    _controller = new TabController(vsync: this, length: 2);
+    _controller = new TabController(vsync: this, length: 3);
 
-    _demoItems = <DemoItem<dynamic>>[
-      new DemoItem<String>(
-        name: 'Repouso',
-        valueToString: (String value) => value,
-        builder: (DemoItem<String> item) {
-          void close() {
-            setState(() {
-              item.isExpanded = false;
-            });
-          }
-          return new ListView(
-            children: <Widget>[
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeFCRepouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerFCRepouso,
-                    maxLines: 1,
-                    focusNode: _focusNodeFCRepouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "FC",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeFRRepouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerFRRepouso,
-                    maxLines: 1,
-                    focusNode: _focusNodeFRRepouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "FR",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeSpO2Repouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerSpO2Repouso,
-                    maxLines: 1,
-                    focusNode: _focusNodeSpO2Repouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "SpO2",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodePARepouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerPARepouso,
-                    maxLines: 1,
-                    focusNode: _focusNodePARepouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "FC",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeBorgDRepouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerBorgDRepouso,
-                    maxLines: 1,
-                    focusNode: _focusNodeBorgDRepouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "FC",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeBorgMMIIRepouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerBorgMMIIRepouso,
-                    maxLines: 1,
-                    focusNode: _focusNodeBorgMMIIRepouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "FC",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-              new Container(
-                child: new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeOxigenioRepouso,            
-                  child: new TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controllerOxigenioRepouso,
-                    maxLines: 1,
-                    focusNode: _focusNodeOxigenioRepouso,
-                    style: Theme.of(context).textTheme.title,
-                    decoration: new InputDecoration(
-                      labelText: "FC",
-                      isDense: true,
-                    ),
-                  ),
-                )
-              ),
-            ],
-          );
-        },
-      )
-    ];
+    
   }
 
   @override
@@ -209,6 +134,8 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
     _controller.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -453,20 +380,515 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
           children: <Widget>[
             new Container(
               margin: new EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: 8.0),
-              child: new ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {
-                  setState(() {
-                    _demoItems[index].isExpanded = !isExpanded;
-                  });
-                },
-                children: _demoItems.map((DemoItem<dynamic> item) {
-                  return new ExpansionPanel(
-                    isExpanded: item.isExpanded,
-                    headerBuilder: item.headerBuilder,
-                    body: item.build()
-                  );
-                }).toList()
-              ),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Text(
+                    'Teste de Caminhada 6 min',
+                    style: new TextStyle(
+                      color: Colors.pink[300],
+                      fontFamily: "Futura",
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w700
+                    ),
+                  ),
+
+                  new Container(margin: new EdgeInsets.all(8.0)),                  
+                  new Text(
+                    'Repouso',
+                    style: new TextStyle(
+                      color: Colors.pink[300],
+                      fontFamily: "Futura",
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFCRepouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFCRepouso,
+                        maxLines: 1,
+                        focusNode: _focusNodeFCRepouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FC",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFRRepouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFRRepouso,
+                        maxLines: 1,
+                        focusNode: _focusNodeFRRepouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FR",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeSpO2Repouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerSpO2Repouso,
+                        maxLines: 1,
+                        focusNode: _focusNodeSpO2Repouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "SpO2",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodePARepouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerPARepouso,
+                        maxLines: 1,
+                        focusNode: _focusNodePARepouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "PA",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgDRepouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgDRepouso,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgDRepouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG D",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgMMIIRepouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgMMIIRepouso,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgMMIIRepouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG MMII",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeOxigenioRepouso,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerOxigenioRepouso,
+                        maxLines: 1,
+                        focusNode: _focusNodeOxigenioRepouso,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "Oxigênio",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+
+                  new Container(margin: new EdgeInsets.all(18.0)),                  
+                  new Text(
+                    '3min',
+                    style: new TextStyle(
+                      color: Colors.pink[300],
+                      fontFamily: "Futura",
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFC3min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFC3min,
+                        maxLines: 1,
+                        focusNode: _focusNodeFC3min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FC",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFR3min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFR3min,
+                        maxLines: 1,
+                        focusNode: _focusNodeFR3min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FR",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeSpO23min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerSpO23min,
+                        maxLines: 1,
+                        focusNode: _focusNodeSpO23min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "SpO2",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodePA3min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerPA3min,
+                        maxLines: 1,
+                        focusNode: _focusNodePA3min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "PA",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgD3min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgD3min,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgD3min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG D",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgMMII3min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgMMII3min,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgMMII3min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG MMII",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeOxigenio3min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerOxigenio3min,
+                        maxLines: 1,
+                        focusNode: _focusNodeOxigenio3min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "Oxigênio",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+
+                  new Container(margin: new EdgeInsets.all(18.0)),                  
+                  new Text(
+                    '6min',
+                    style: new TextStyle(
+                      color: Colors.pink[300],
+                      fontFamily: "Futura",
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFC6min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFC6min,
+                        maxLines: 1,
+                        focusNode: _focusNodeFC6min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FC",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFR6min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFR6min,
+                        maxLines: 1,
+                        focusNode: _focusNodeFR6min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FR",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeSpO26min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerSpO26min,
+                        maxLines: 1,
+                        focusNode: _focusNodeSpO26min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "SpO2",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodePA6min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerPA6min,
+                        maxLines: 1,
+                        focusNode: _focusNodePA6min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "PA",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgD6min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgD6min,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgD6min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG D",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgMMII6min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgMMII6min,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgMMII6min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG MMII",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeOxigenio6min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerOxigenio6min,
+                        maxLines: 1,
+                        focusNode: _focusNodeOxigenio6min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "Oxigênio",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+
+                  new Container(margin: new EdgeInsets.all(18.0)),                  
+                  new Text(
+                    'Repouso2min',
+                    style: new TextStyle(
+                      color: Colors.pink[300],
+                      fontFamily: "Futura",
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFCRepouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFCRepouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodeFCRepouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FC",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeFRRepouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerFRRepouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodeFRRepouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "FR",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeSpO2Repouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerSpO2Repouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodeSpO2Repouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "SpO2",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodePARepouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerPARepouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodePARepouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "PA",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgDRepouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgDRepouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgDRepouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG D",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeBorgMMIIRepouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerBorgMMIIRepouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodeBorgMMIIRepouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "BORG MMII",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+                  new Container(
+                    child: new EnsureVisibleWhenFocused(
+                      focusNode: _focusNodeOxigenioRepouso2min,            
+                      child: new TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controllerOxigenioRepouso2min,
+                        maxLines: 1,
+                        focusNode: _focusNodeOxigenioRepouso2min,
+                        style: Theme.of(context).textTheme.title,
+                        decoration: new InputDecoration(
+                          labelText: "Oxigênio",
+                          isDense: true,
+                        ),
+                      ),
+                    )
+                  ),
+
+                  new Container(margin: new EdgeInsets.all(42.0)),
+
+                ]
+              )
             )
           ]
         )
@@ -628,167 +1050,5 @@ class InputDropdown extends StatelessWidget {
       ),
     );
   }
-}
-
-typedef Widget DemoItemBodyBuilder<T>(DemoItem<T> item);
-typedef String ValueToString<T>(T value);
-
-class DualHeaderWithHint extends StatelessWidget {
-  const DualHeaderWithHint({
-    this.name,
-    this.value,
-    this.hint,
-    this.showHint
-  });
-
-  final String name;
-  final String value;
-  final String hint;
-  final bool showHint;
-
-  Widget _crossFade(Widget first, Widget second, bool isExpanded) {
-    return new AnimatedCrossFade(
-      firstChild: first,
-      secondChild: second,
-      firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-      secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
-      sizeCurve: Curves.fastOutSlowIn,
-      crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      duration: const Duration(milliseconds: 200),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
-
-    return new Row(
-      children: <Widget>[
-        new Expanded(
-          flex: 2,
-          child: new Container(
-            margin: const EdgeInsets.only(left: 24.0),
-            child: new FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: new Text(
-                name,
-                style: textTheme.body1.copyWith(fontSize: 15.0),
-              ),
-            ),
-          ),
-        ),
-        new Expanded(
-          flex: 3,
-          child: new Container(
-            margin: const EdgeInsets.only(left: 24.0),
-            child: _crossFade(
-              new Text(value, style: textTheme.caption.copyWith(fontSize: 15.0)),
-              new Text(hint, style: textTheme.caption.copyWith(fontSize: 15.0)),
-              showHint
-            )
-          )
-        )
-      ]
-    );
-  }
-}
-
-class CollapsibleBody extends StatelessWidget {
-  const CollapsibleBody({
-    this.margin: EdgeInsets.zero,
-    this.child,
-    //this.onSave,
-    //this.onCancel
-  });
-
-  final EdgeInsets margin;
-  final Widget child;
-  //final VoidCallback onSave;
-  //final VoidCallback onCancel;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
-
-    return new Column(
-      children: <Widget>[
-        new Container(
-          margin: const EdgeInsets.only(
-            left: 24.0,
-            right: 24.0,
-            bottom: 24.0
-          ) - margin,
-          child: new Center(
-            child: new DefaultTextStyle(
-              style: textTheme.caption.copyWith(fontSize: 15.0),
-              child: child
-            )
-          )
-        ),
-        //const Divider(height: 1.0),
-        //new Container(
-        //  padding: const EdgeInsets.symmetric(vertical: 16.0),
-        //  child: new Row(
-        //    mainAxisAlignment: MainAxisAlignment.end,
-        //    children: <Widget>[
-        //      new Container(
-        //        margin: const EdgeInsets.only(right: 8.0),
-        //        child: new FlatButton(
-        //          onPressed: onCancel,
-        //          child: const Text('CANCEL', style: const TextStyle(
-        //            color: Colors.black54,
-        //            fontSize: 15.0,
-        //            fontWeight: FontWeight.w500
-        //          ))
-        //        )
-        //      ),
-        //      new Container(
-        //        margin: const EdgeInsets.only(right: 8.0),
-        //        child: new FlatButton(
-        //          onPressed: onSave,
-        //          textTheme: ButtonTextTheme.accent,
-        //          child: const Text('SAVE')
-        //        )
-        //      )
-        //    ]
-        //  )
-        //)
-      ]
-    );
-  }
-}
-
-class DemoItem<T> {
-  DemoItem({
-    this.name,
-    this.value,
-    this.hint,
-    this.builder,
-    this.valueToString
-  }) : textController = new TextEditingController(text: valueToString(value));
-
-  final String name;
-  final String hint;
-  final TextEditingController textController;
-  final DemoItemBodyBuilder<T> builder;
-  final ValueToString<T> valueToString;
-  T value;
-  bool isExpanded = false;
-
-  ExpansionPanelHeaderBuilder get headerBuilder {
-    return (BuildContext context, bool isExpanded) {
-      return new DualHeaderWithHint(
-        name: name,
-        value: valueToString(value),
-        hint: hint,
-        showHint: isExpanded
-      );
-    };
-  }
-
-  Widget build() => builder(this);
 }
 
