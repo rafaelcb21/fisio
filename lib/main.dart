@@ -2,6 +2,27 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+GoogleSignIn _googleSignIn = new GoogleSignIn(
+  scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
+
+Future<Null> _handleSignIn() async {
+  try {
+    await _googleSignIn.signIn();
+
+  } catch (error) {
+    print(error);
+  }
+}
+
+Future<Null> _handleSignOut() async {
+    _googleSignIn.disconnect();
+  }
 
 void main() {
   runApp(new FisioApp());
@@ -119,6 +140,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
   bool _customIndicator = false;
 
   int numeroDistancia = 0;
+  
 
   
 
@@ -126,8 +148,6 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
   void initState() {
     super.initState();
     _controller = new TabController(vsync: this, length: 4);
-
-    
   }
 
   @override
@@ -137,8 +157,8 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
   }
 
   vo2Pico(int distancia) {
-      this.vo2PicoString = ((0.03 * distancia) + 3.98).toStringAsFixed(2).toString().replaceAll('.', ',');  
-    }
+    this.vo2PicoString = ((0.03 * distancia) + 3.98).toStringAsFixed(2).toString().replaceAll('.', ',');  
+  }
 
   estimativaDistanciaTC6M() {
     if(this.value == 'Homem') {
@@ -166,6 +186,8 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
     const Color _kKeyUmbraOpacity = const Color(0x33000000); // alpha = 0.2
     const Color _kKeyPenumbraOpacity = const Color(0x24000000); // alpha = 0.14
     const Color _kAmbientShadowOpacity = const Color(0x1F000000);
+    var assetImage = new AssetImage('assets/google-g-logo.png');
+    var image = new Image(image: assetImage, width: 96.0, height: 96.0);
 
     List<Page> allPages = <Page>[
       new Page(
@@ -265,7 +287,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                   new Container(margin: new EdgeInsets.all(8.0))
                 ]
               )
-            )
+            ),
           ]
         )
       ),
@@ -278,7 +300,6 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-
                   new Text(
                     'Avaliação Muscular Respiratória',
                     style: new TextStyle(
@@ -303,7 +324,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                       ),
                     ),
                   ),
-
+//
                   new EnsureVisibleWhenFocused(
                     focusNode: _focusNodePemax,
                     child: new TextField(
@@ -318,7 +339,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                       ),
                     ),
                   ),
-
+//
                   new Container(margin: new EdgeInsets.all(8.0)),
                   
                   new Text(
@@ -330,21 +351,21 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                       fontWeight: FontWeight.w400
                     ),
                   ),
-
+//
                   new InputDropdown(
                     labelText: 'Pimáx normal',
                     valueText: _valueTextNormalPimax,
                     valueStyle: valueStyle,
                     onPressed: () {},
                   ),
-
+//
                   new InputDropdown(
                     labelText: 'Pemáx normal',
                     valueText: _valueTextNormalPemax,
                     valueStyle: valueStyle,
                     onPressed: () {},
                   ),
-
+//
                   new Container(margin: new EdgeInsets.all(8.0)),
                   new InkWell(
                     onTap: () {
@@ -417,7 +438,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                           fontWeight: FontWeight.w700
                         ),
                       ),
-
+//
                       new Container(margin: new EdgeInsets.all(8.0)),                  
                       new Text(
                         'Repouso',
@@ -540,7 +561,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                           ),
                         )
                       ),
-
+//
                       new Container(margin: new EdgeInsets.all(18.0)),                  
                       new Text(
                         '3min',
@@ -663,7 +684,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                           ),
                         )
                       ),
-
+//
                       new Container(margin: new EdgeInsets.all(18.0)),                  
                       new Text(
                         '6min',
@@ -786,7 +807,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                           ),
                         )
                       ),
-
+//
                       new Container(margin: new EdgeInsets.all(18.0)),                  
                       new Text(
                         'Repouso2min',
@@ -909,15 +930,15 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                           ),
                         )
                       ),
-
+//
                       new Container(margin: new EdgeInsets.all(42.0)),
-
+//
                     ]
                   )
                 )
               ]
             ),
-
+//
             new Positioned(
               bottom: 16.0,
               left: 16.0,
@@ -953,7 +974,7 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                 )
               ),
             ),
-
+//
             new Positioned(
               bottom: 16.0,
               left: 90.0,
@@ -1091,11 +1112,11 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
                 )
               ),
             ),
-
+//
           ]
         )
       ),
-
+//
       new Page(
         icon: Icons.filter_4,
         widget: new ListView(
@@ -1141,9 +1162,17 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
     //  );
     //}
 
-    return new Scaffold(
+    var fisioApp = new Scaffold(
       appBar: new AppBar(
         title: new Text('Fisioterapia'),
+        actions: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.exit_to_app),
+            onPressed: () {
+              _handleSignOut();
+            }
+          )
+        ],
         backgroundColor: Colors.pink[400],
         bottom: new TabBar(
           controller: _controller,
@@ -1184,6 +1213,51 @@ class _FisioPageState extends State<FisioPage>  with SingleTickerProviderStateMi
         }).toList()
       ),
     );
+
+    var loginPage = new Scaffold(
+      backgroundColor: Colors.pink[400],
+      body: new Center(
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            new Material(
+              color: Colors.white,
+              type: MaterialType.circle,
+              elevation: 6.0,
+              child: new GestureDetector(
+                child: new Container(
+                  width: 112.0,
+                  height: 112.0,
+                  child: new InkWell(
+                    onTap: () {
+                      _handleSignIn();
+                    },
+                    child: new Center(
+                      child: image                      
+                    ),
+                  )
+                ),
+              )
+            ),
+
+            new Container(
+              margin: new EdgeInsets.only(top: 16.0),
+              child: new Text(
+                'Entre com o Google',
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Futura",
+                  fontSize: 18.0
+                ),
+              ),
+            ),
+          ],
+        )
+      )
+    );
+
+    return _googleSignIn.currentUser == null ? loginPage : fisioApp;
   }
 }
 
@@ -1285,4 +1359,3 @@ class InputDropdown extends StatelessWidget {
     );
   }
 }
-
