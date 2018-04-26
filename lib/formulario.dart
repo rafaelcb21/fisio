@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-
+import 'dbsqlite.dart';
 
 class Page {
   const Page({ this.icon, this.widget });
@@ -28,6 +26,7 @@ class FormPage extends StatefulWidget {
 }
 
 class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin {
+  BancoDados bancoDadosDB = new BancoDados();
   TabController _controller;
   FocusNode _focusNodeNome = new FocusNode();
   FocusNode _focusNodeIdade = new FocusNode();
@@ -45,11 +44,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   FocusNode _focusNodeOxigenioRepouso = new FocusNode();
 
   FocusNode _focusNodeFC3min = new FocusNode();
-  FocusNode _focusNodeFR3min = new FocusNode();
   FocusNode _focusNodeSpO23min = new FocusNode();
-  FocusNode _focusNodePA3min = new FocusNode();
-  FocusNode _focusNodeBorgD3min = new FocusNode();
-  FocusNode _focusNodeBorgMMII3min = new FocusNode();
   FocusNode _focusNodeOxigenio3min = new FocusNode();
 
   FocusNode _focusNodeFC6min = new FocusNode();
@@ -84,11 +79,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   TextEditingController _controllerOxigenioRepouso = new TextEditingController();
 
   TextEditingController _controllerFC3min = new TextEditingController();
-  TextEditingController _controllerFR3min = new TextEditingController();
   TextEditingController _controllerSpO23min = new TextEditingController();
-  TextEditingController _controllerPA3min = new TextEditingController();
-  TextEditingController _controllerBorgD3min = new TextEditingController();
-  TextEditingController _controllerBorgMMII3min = new TextEditingController();
   TextEditingController _controllerOxigenio3min = new TextEditingController();
 
   TextEditingController _controllerFC6min = new TextEditingController();
@@ -107,8 +98,8 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   TextEditingController _controllerBorgMMIIRepouso2min = new TextEditingController();
   TextEditingController _controllerOxigenioRepouso2min = new TextEditingController();
 
-  String vo2PicoString;
-  String estimativaDistanciaTC6MString;
+  String vo2PicoString = '';
+  String estimativaDistanciaTC6MString = '';
 
   String value = "Homem";
   String _valueTextNormalPimax = '';
@@ -464,7 +455,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                             focusNode: _focusNodeSpO2Repouso,
                             style: Theme.of(context).textTheme.title,
                             decoration: new InputDecoration(
-                              labelText: "SpO2",
+                              labelText: "SpO2 (%)",
                               isDense: true,
                             ),
                           ),
@@ -474,7 +465,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                         child: new EnsureVisibleWhenFocused(
                           focusNode: _focusNodePARepouso,            
                           child: new TextField(
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                             controller: _controllerPARepouso,
                             maxLines: 1,
                             focusNode: _focusNodePARepouso,
@@ -563,22 +554,6 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                       ),
                       new Container(
                         child: new EnsureVisibleWhenFocused(
-                          focusNode: _focusNodeFR3min,            
-                          child: new TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _controllerFR3min,
-                            maxLines: 1,
-                            focusNode: _focusNodeFR3min,
-                            style: Theme.of(context).textTheme.title,
-                            decoration: new InputDecoration(
-                              labelText: "FR",
-                              isDense: true,
-                            ),
-                          ),
-                        )
-                      ),
-                      new Container(
-                        child: new EnsureVisibleWhenFocused(
                           focusNode: _focusNodeSpO23min,            
                           child: new TextField(
                             keyboardType: TextInputType.number,
@@ -588,54 +563,6 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                             style: Theme.of(context).textTheme.title,
                             decoration: new InputDecoration(
                               labelText: "SpO2",
-                              isDense: true,
-                            ),
-                          ),
-                        )
-                      ),
-                      new Container(
-                        child: new EnsureVisibleWhenFocused(
-                          focusNode: _focusNodePA3min,            
-                          child: new TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _controllerPA3min,
-                            maxLines: 1,
-                            focusNode: _focusNodePA3min,
-                            style: Theme.of(context).textTheme.title,
-                            decoration: new InputDecoration(
-                              labelText: "PA",
-                              isDense: true,
-                            ),
-                          ),
-                        )
-                      ),
-                      new Container(
-                        child: new EnsureVisibleWhenFocused(
-                          focusNode: _focusNodeBorgD3min,            
-                          child: new TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _controllerBorgD3min,
-                            maxLines: 1,
-                            focusNode: _focusNodeBorgD3min,
-                            style: Theme.of(context).textTheme.title,
-                            decoration: new InputDecoration(
-                              labelText: "BORG D",
-                              isDense: true,
-                            ),
-                          ),
-                        )
-                      ),
-                      new Container(
-                        child: new EnsureVisibleWhenFocused(
-                          focusNode: _focusNodeBorgMMII3min,            
-                          child: new TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _controllerBorgMMII3min,
-                            maxLines: 1,
-                            focusNode: _focusNodeBorgMMII3min,
-                            style: Theme.of(context).textTheme.title,
-                            decoration: new InputDecoration(
-                              labelText: "BORG MMII",
                               isDense: true,
                             ),
                           ),
@@ -657,7 +584,6 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                           ),
                         )
                       ),
-//
                       new Container(margin: new EdgeInsets.all(18.0)),                  
                       new Text(
                         '6min',
@@ -1112,6 +1038,133 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
               valueStyle: valueStyle,
               onPressed: () {},
             ),
+            new Container(margin: new EdgeInsets.all(24.0)),
+              new InkWell(
+                onTap: () {
+                  setState(() {
+                    String nome = _controllerNome.text;
+                    String genero = this.value;
+                    int idade = int.parse(_controllerIdade.text);
+                    double peso = double.parse(_controllerPeso.text);
+                    int altura = int.parse(_controllerAltura.text);
+                    
+                    double pimax = double.parse(_controllerPimax.text);
+                    double pemax = double.parse(_controllerPemax.text);
+                    double pimaxnormal = double.parse(_valueTextNormalPimax);
+                    double pemaxnormal = double.parse(_valueTextNormalPemax);
+                    
+                    int repousofc = int.parse(_controllerFCRepouso.text);
+                    int repousofr = int.parse(_controllerFRRepouso.text);
+                    int repousospo = int.parse(_controllerSpO2Repouso.text);
+                    String repousopa = _controllerPARepouso.text;
+                    int repousobrogd = int.parse(_controllerBorgDRepouso.text);
+                    int repousommii = int.parse(_controllerBorgMMIIRepouso.text);
+                    String repousooxigenio = _controllerOxigenioRepouso.text;
+
+                    int min3fc = int.parse(_controllerFC3min.text);
+                    int min3spo = int.parse(_controllerSpO23min.text);
+                    String min3oxigenio = _controllerOxigenio3min.text;
+
+                    int min6fc = int.parse(_controllerFC6min.text);
+                    int min6fr = int.parse(_controllerFR6min.text);
+                    int min6spo = int.parse(_controllerSpO26min.text);
+                    String min6pa = _controllerPA6min.text;
+                    int min6brogd = int.parse(_controllerBorgD6min.text);
+                    int min6mmii = int.parse(_controllerBorgMMII6min.text);
+                    String min6oxigenio = _controllerOxigenio6min.text;
+
+                    int repouso2fc = int.parse(_controllerFCRepouso2min.text);
+                    int repouso2fr = int.parse(_controllerFRRepouso2min.text);
+                    int repouso2spo = int.parse(_controllerSpO2Repouso2min.text);
+                    String repouso2pa = _controllerPARepouso2min.text;
+                    int repouso2brogd = int.parse(_controllerBorgDRepouso2min.text);
+                    int repouso2mmii = int.parse(_controllerBorgMMIIRepouso2min.text);
+                    String repouso2oxigenio = _controllerOxigenioRepouso2min.text;
+
+                    int distancia = this.numeroDistancia;
+                    double tc6min = double.parse(this.estimativaDistanciaTC6MString);
+                    double vo2pico = double.parse(this.vo2PicoString);
+
+                    Map form = {
+                      'nome': nome,
+                      'genero': genero,
+                      'idade': idade,
+                      'peso': peso,
+                      'altura': altura,
+                      'pimax': pimax,
+                      'pemax': pemax,
+                      'pimaxnormal': pimaxnormal,
+                      'pemaxnormal': pemaxnormal,
+                      'repousofc': repousofc,
+                      'repousofr': repousofr,
+                      'repousospo': repousospo,
+                      'repousopa': repousopa,
+                      'repousobrogd': repousobrogd,
+                      'repousommii': repousommii,
+                      'repousooxigenio': repousooxigenio,
+                      'min3fc': min3fc,
+                      'min3spo': min3spo,
+                      'min3oxigenio': min3oxigenio,
+                      'min6fc': min6fc,
+                      'min6fr': min6fr,
+                      'min6spo': min6spo,
+                      'min6pa': min6pa,
+                      'min6brogd': min6brogd,
+                      'min6mmii': min6mmii,
+                      'min6oxigenio': min6oxigenio,
+                      'repouso2fc': repouso2fc,
+                      'repouso2fr': repouso2fr,
+                      'repouso2spo': repouso2spo,
+                      'repouso2pa': repouso2pa,
+                      'repouso2brogd': repouso2brogd,
+                      'repouso2mmii': repouso2mmii,
+                      'repouso2oxigenio': repouso2oxigenio,
+                      'distancia': distancia,
+                      'tc6min': tc6min,
+                      'vo2pico': vo2pico                    
+                    };
+
+                    bancoDadosDB.insertForm(form).then((data) {
+                      if(data) {
+                        Scaffold.of(context).showSnackBar(const SnackBar(
+                          content: const Text('Salvo com sucesso!')
+                          )
+                        );
+
+
+                      }
+                    });
+                  });                  
+                },
+                child: new Container(
+                  margin: new EdgeInsets.only(top:4.0, bottom: 4.0, left: 8.0, right: 8.0),
+                  decoration: new BoxDecoration(
+                    color: Colors.pink[400],
+                    borderRadius: new BorderRadius.all(const Radius.circular(3.0)),
+                    boxShadow: [
+                      const BoxShadow(offset: const Offset(0.0, 2.0), blurRadius: 4.0, spreadRadius: -1.0, color: _kKeyUmbraOpacity),
+                      const BoxShadow(offset: const Offset(0.0, 4.0), blurRadius: 5.0, spreadRadius: 0.0, color: _kKeyPenumbraOpacity),
+                      const BoxShadow(offset: const Offset(0.0, 1.0), blurRadius: 10.0, spreadRadius: 0.0, color: _kAmbientShadowOpacity),
+                    ]
+                  ),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Container(
+                        padding: new EdgeInsets.only(top: 14.0, bottom: 14.0),
+                        child: new Text(
+                          'Salvar',
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Futura",
+                            fontSize: 18.0
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
           ],
         )
       )
@@ -1140,14 +1193,6 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
         title: new Text('Fisioterapia'),
         //leading: new Container(),
         automaticallyImplyLeading: false,
-        actions: <Widget>[
-          new IconButton(
-            icon: new Icon(Icons.exit_to_app),
-            onPressed: () {
-              //_handleSignOut();
-            }
-          )
-        ],
         backgroundColor: Colors.pink[400],
         bottom: new TabBar(
           controller: _controller,

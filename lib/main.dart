@@ -6,15 +6,15 @@ import 'formulario.dart';
 import 'dbsqlite.dart';
 
 
-GoogleSignIn _googleSignIn = new GoogleSignIn(
+GoogleSignIn googleSignIn = new GoogleSignIn(
   scopes: <String>[
     'email',
     'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
 
-Future<Null> _handleSignOut() async {
-    _googleSignIn.disconnect();
+Future<Null> handleSignOut() async {
+    googleSignIn.disconnect();
   }
 
 void main() {
@@ -39,16 +39,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  BancoDados bancoDadosDB = new BancoDados();  
+  DatabaseClient db = new DatabaseClient();
+  BancoDados bancoDadosDB = new BancoDados();
 
   @override
   void initState() {
     super.initState();
-    bancoDadosDB.getLogin().then((data) {
-      if(data == true) {
-        Navigator.pushReplacementNamed(context, '/formulario');
-      }
+    db.create().then((data) {
+      bancoDadosDB.getLogin().then((data) {
+        if(data == true) {
+          Navigator.pushReplacementNamed(context, '/formulario');
+        }
+      });
     });
+    
   }
 
   @override
@@ -74,7 +78,8 @@ class LoginPageState extends State<LoginPage> {
                   child: new InkWell(
                     onTap: () async {
                       try {
-                        await _googleSignIn.signIn().then((data) {
+                        await googleSignIn.signIn().then((data) {
+                          print(data);
                           bancoDadosDB.insertLogin(data.displayName, data.email);
                           Navigator.pushReplacementNamed(context, '/formulario');
                           //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
