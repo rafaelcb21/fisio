@@ -49,14 +49,21 @@ class LoginPageState extends State<LoginPage> {
       googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
         setState(() {
           account.authHeaders.then((result) {
-            print(account.email);
-            print([result['Authorization'], result['X-Goog-AuthUser']]);
-            //var header = {'Authorization': result['Authorization'], 'X-Goog-AuthUser': result['X-Goog-AuthUser']}; 
-            print(account);
+            //print(account.email);
+            //print([result['Authorization'], result['X-Goog-AuthUser']]);
+            var header = {'Authorization': result['Authorization'], 'X-Goog-AuthUser': result['X-Goog-AuthUser']}; 
+            //print(account);
             if (account != null) {
-              bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
-              Navigator.pushReplacementNamed(context, '/formulario');
-            }
+              //bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
+              //Navigator.pushReplacementNamed(context, '/formulario');
+
+              Navigator.of(context).pushReplacement(
+                new MaterialPageRoute(
+                  settings: const RouteSettings(name: '/formulario'),
+                  builder: (context) => new FormPage(email: account.email, header: header)
+                )
+              );
+             }
           });
         });
       }
@@ -90,10 +97,10 @@ class LoginPageState extends State<LoginPage> {
                     onTap: () async {
                       try {
                         await googleSignIn.signIn().then((account) {
-                          account.authHeaders.then((result) {                            
-                            bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
-                            Navigator.pushReplacementNamed(context, '/formulario');
-                          });                          
+                          account.authHeaders.then((result) {
+                            //bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
+                            //Navigator.pushReplacementNamed(context, '/formulario');
+                          });
                         });
                           //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
                       } catch (error) {

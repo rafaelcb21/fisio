@@ -58,17 +58,17 @@ class DatabaseClient {
       """
     );
 
-    await db.execute(
-      """
-        CREATE TABLE login (
-          id INTEGER PRIMARY KEY,
-          user TEXT NOT NULL,
-          email TEXT NOT NULL,
-          accesstoken TEXT NOT NULL,
-          authuser TEXT NOT NULL
-        )
-      """
-    );
+    //await db.execute(
+    //  """
+    //    CREATE TABLE login (
+    //      id INTEGER PRIMARY KEY,
+    //      user TEXT NOT NULL,
+    //      email TEXT NOT NULL,
+    //      accesstoken TEXT NOT NULL,
+    //      authuser TEXT NOT NULL
+    //    )
+    //  """
+    //);
 
   }
 }
@@ -77,38 +77,36 @@ class BancoDados {
   BancoDados();
   Database db;
 
-  Future getLogin() async {
-    Directory path = await getApplicationDocumentsDirectory();
-    String dbPath = join(path.path, "database.db");
-    Database db = await openDatabase(dbPath);
-    List results = await db.rawQuery("SELECT * FROM login");
-    print(results);
-    print('+++++++++++++++++++++++');
-    Map<String, String> header = {'Authorization': results[0]['accesstoken'].toString(), 'X-Goog-AuthUser': results[0]['authuser'].toString()};
-    String email = results[0]['email'];
-    await db.close();
-    return [email, header];
-  }
+  //Future getLogin() async {
+  //  Directory path = await getApplicationDocumentsDirectory();
+  //  String dbPath = join(path.path, "database.db");
+  //  Database db = await openDatabase(dbPath);
+  //  List results = await db.rawQuery("SELECT * FROM login");
+  //  Map<String, String> header = {'Authorization': results[0]['accesstoken'].toString(), 'X-Goog-AuthUser': results[0]['authuser'].toString()};
+  //  String email = results[0]['email'];
+  //  await db.close();
+  //  return [email, header];
+  //}
 
-  Future insertLogin(String user, String email, String accesstoken, String authuser) async {
-    Directory path = await getApplicationDocumentsDirectory();
-    String dbPath = join(path.path, "database.db");
-    Database db = await openDatabase(dbPath);
-    await db.rawDelete("DELETE FROM login").then((data) async {
-      await db.rawInsert("INSERT INTO login (user, email, accesstoken, authuser) VALUES (?, ?, ?, ?)", [user, email, accesstoken, authuser]);
-      await db.close();
-    });          
-    return true;
-  }
+  //Future insertLogin(String user, String email, String accesstoken, String authuser) async {
+  //  Directory path = await getApplicationDocumentsDirectory();
+  //  String dbPath = join(path.path, "database.db");
+  //  Database db = await openDatabase(dbPath);
+  //  await db.rawDelete("DELETE FROM login").then((data) async {
+  //    await db.rawInsert("INSERT INTO login (user, email, accesstoken, authuser) VALUES (?, ?, ?, ?)", [user, email, accesstoken, authuser]);
+  //    await db.close();
+  //  });          
+  //  return true;
+  //}
 
-  Future deleteLogin() async {
-    Directory path = await getApplicationDocumentsDirectory();
-    String dbPath = join(path.path, "database.db");
-    Database db = await openDatabase(dbPath);
-    await db.rawDelete("DELETE FROM login");        
-    await db.close();
-    return true;
-  }
+  //Future deleteLogin() async {
+  //  Directory path = await getApplicationDocumentsDirectory();
+  //  String dbPath = join(path.path, "database.db");
+  //  Database db = await openDatabase(dbPath);
+  //  await db.rawDelete("DELETE FROM login");        
+  //  await db.close();
+  //  return true;
+  //}
 
   Future insertForm(Map form) async {
     Directory path = await getApplicationDocumentsDirectory();

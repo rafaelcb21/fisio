@@ -13,7 +13,9 @@ class Page {
 } 
 
 class FormPage extends StatefulWidget {
-  FormPage();
+  FormPage({Key key, this.email, this.header}) : super(key: key);
+  String email;
+  Map header;
   
   @override
   FormPageState createState() => new FormPageState();
@@ -108,16 +110,18 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
 
   int numeroDistancia = 0;
   String email;
-  Map<String, String> header;
+  Map header;
 
   @override
   void initState() {
     super.initState();
     _controller = new TabController(vsync: this, length: 4);
-    bancoDadosDB.getLogin().then((resp) {
-      this.email = resp[0];
-      this.header = resp[1];
-    });
+    this.email = widget.email;
+    this.header = widget.header;
+    //bancoDadosDB.getLogin().then((resp) {
+    //  this.email = resp[0];
+    //  this.header = resp[1];
+    //});
   }
 
   @override
