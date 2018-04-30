@@ -53,7 +53,8 @@ class DatabaseClient {
           repouso2oxigenio TEXT,
           distancia INTEGER NOT NULL,
           tc6min REAL NOT NULL,
-          vo2pico REAL NOT NULL
+          vo2pico REAL NOT NULL,
+          data TEXT NOT NULL
         )
       """
     );
@@ -149,6 +150,7 @@ class BancoDados {
     int distancia = form['distancia'];
     double tc6min = form['tc6min'];
     double vo2pico = form['vo2pico'];
+    String data = form['data'];
 
 
     await db.rawInsert(
@@ -189,10 +191,11 @@ class BancoDados {
         repouso2oxigenio,
         distancia,
         tc6min,
-        vo2pico
+        vo2pico,
+        data
       ) VALUES (
         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
       )''', [
         nome,
         genero,
@@ -229,7 +232,8 @@ class BancoDados {
         repouso2oxigenio,
         distancia,
         tc6min,
-        vo2pico
+        vo2pico,
+        data
       ]
     );
     await db.close();       

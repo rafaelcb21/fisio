@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'dbsqlite.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class Page {
   const Page({ this.icon, this.widget });
@@ -1242,7 +1243,8 @@ ${message}''';
                       'repouso2oxigenio': repouso2oxigenio,
                       'distancia': distancia,
                       'tc6min': tc6min,
-                      'vo2pico': vo2pico                    
+                      'vo2pico': vo2pico,
+                      'data': new DateFormat("yyyy-MM-dd").format(new DateTime.now())               
                     };
 
                     bancoDadosDB.insertForm(form).then((data) {
