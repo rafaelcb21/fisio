@@ -63,7 +63,9 @@ class DatabaseClient {
         CREATE TABLE login (
           id INTEGER PRIMARY KEY,
           user TEXT NOT NULL,
-          email TEXT NOT NULL
+          email TEXT NOT NULL,
+          accesstoken TEXT NOT NULL,
+          authuser TEXT NOT NULL
         )
       """
     );
@@ -80,18 +82,22 @@ class BancoDados {
     String dbPath = join(path.path, "database.db");
     Database db = await openDatabase(dbPath);
     List results = await db.rawQuery("SELECT * FROM login");
-    bool resposta = false;
-    if(results.length > 0) { resposta = true; }
+    print(results);
+    print('+++++++++++++++++++++++');
+    Map<String, String> header = {'Authorization': results[0]['accesstoken'].toString(), 'X-Goog-AuthUser': results[0]['authuser'].toString()};
+    String email = results[0]['email'];
     await db.close();
-    return resposta;
+    return [email, header];
   }
 
-  Future insertLogin(String user, String email) async {
+  Future insertLogin(String user, String email, String accesstoken, String authuser) async {
     Directory path = await getApplicationDocumentsDirectory();
     String dbPath = join(path.path, "database.db");
     Database db = await openDatabase(dbPath);
-    await db.rawInsert("INSERT INTO login (user, email) VALUES (?, ?)", [user, email]);
-    await db.close();       
+    await db.rawDelete("DELETE FROM login").then((data) async {
+      await db.rawInsert("INSERT INTO login (user, email, accesstoken, authuser) VALUES (?, ?, ?, ?)", [user, email, accesstoken, authuser]);
+      await db.close();
+    });          
     return true;
   }
 
@@ -188,7 +194,7 @@ class BancoDados {
         vo2pico
       ) VALUES (
         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
       )''', [
         nome,
         genero,
@@ -226,7 +232,8 @@ class BancoDados {
         distancia,
         tc6min,
         vo2pico
-      ]);
+      ]
+    );
     await db.close();       
     return true;
   }

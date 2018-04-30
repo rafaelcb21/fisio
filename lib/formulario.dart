@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'dbsqlite.dart';
+import "package:http/http.dart" as http;
+import 'dart:convert';
 
 class Page {
   const Page({ this.icon, this.widget });
@@ -10,22 +12,20 @@ class Page {
   final Widget widget;
 } 
 
-class FormApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: "Fisioterapia",
-      home: new FormPage(),
-    );
-  }
-}
-
 class FormPage extends StatefulWidget {
+  FormPage();
+  
   @override
   FormPageState createState() => new FormPageState();
 }
 
 class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(value)));
+  }
+
   BancoDados bancoDadosDB = new BancoDados();
   TabController _controller;
   FocusNode _focusNodeNome = new FocusNode();
@@ -106,12 +106,18 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   String _valueTextNormalPemax = '';
   bool _customIndicator = false;
 
-  int numeroDistancia = 0;  
+  int numeroDistancia = 0;
+  String email;
+  Map<String, String> header;
 
   @override
   void initState() {
     super.initState();
     _controller = new TabController(vsync: this, length: 4);
+    bancoDadosDB.getLogin().then((resp) {
+      this.email = resp[0];
+      this.header = resp[1];
+    });
   }
 
   @override
@@ -124,7 +130,56 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
     this.vo2PicoString = ((0.03 * distancia) + 3.98).toStringAsFixed(2).toString().replaceAll('.', ',');  
   }
 
+  Future<Null> sendEmail(String userId, Map<String, String> cabecalho) async {
+    cabecalho['Accept'] = 'application/json';
+    cabecalho['Content-type'] = 'application/json';
+
+    var from = userId;
+    var to = userId;
+    var subject = 'test send email';
+    var message = 'Hi2 Html Email2';
+    var content =
+      '''
+Content-Type: text/html; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+to: ${to}
+from: ${from}
+subject: ${subject}
+
+${message}''';
+
+    var bytes = utf8.encode(content);
+    var base64 = base64Encode(bytes);
+    var body = json.encode({'raw': base64});
+    print(body);
+    String url = 'https://www.googleapis.com/gmail/v1/users/' + userId + '/messages/send';
+    
+    final http.Response response = await http.post(url, headers: cabecalho, body: body);
+    if (response.statusCode != 200) {
+      setState(() {
+        print('error: ' + response.statusCode.toString());
+        print(url);
+        print(json.decode(response.body));
+      });
+      return;
+    }
+    final Map<String, dynamic> data = json.decode(response.body);
+    print('ok: ' + response.statusCode.toString());
+    print(data);
+  }
+
   estimativaDistanciaTC6M() {
+
+    if(_controllerAltura.text.length == 0) {
+      _controllerAltura.text = '0.0';
+    }
+    if(_controllerPeso.text.length == 0) {
+      _controllerPeso.text = '0.0';
+    }
+    if(_controllerIdade.text.length == 0) {
+      _controllerIdade.text = '0.0';
+    }
     if(this.value == 'Homem') {
       var numero = 
         (7.57 * double.parse(_controllerAltura.text.replaceAll(',', '.'))) -
@@ -141,8 +196,6 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
       
     }     
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +341,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                       ),
                     ),
                   ),
-//
+
                   new EnsureVisibleWhenFocused(
                     focusNode: _focusNodePemax,
                     child: new TextField(
@@ -303,7 +356,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                       ),
                     ),
                   ),
-//
+
                   new Container(margin: new EdgeInsets.all(8.0)),
                   
                   new Text(
@@ -315,21 +368,21 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                       fontWeight: FontWeight.w400
                     ),
                   ),
-//
+
                   new InputDropdown(
                     labelText: 'Pimáx normal',
                     valueText: _valueTextNormalPimax,
                     valueStyle: valueStyle,
                     onPressed: () {},
                   ),
-//
+
                   new InputDropdown(
                     labelText: 'Pemáx normal',
                     valueText: _valueTextNormalPemax,
                     valueStyle: valueStyle,
                     onPressed: () {},
                   ),
-//
+
                   new Container(margin: new EdgeInsets.all(8.0)),
                   new InkWell(
                     onTap: () {
@@ -402,7 +455,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                           fontWeight: FontWeight.w700
                         ),
                       ),
-//
+
                       new Container(margin: new EdgeInsets.all(8.0)),                  
                       new Text(
                         'Repouso',
@@ -525,7 +578,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                           ),
                         )
                       ),
-//
+
                       new Container(margin: new EdgeInsets.all(18.0)),                  
                       new Text(
                         '3min',
@@ -706,7 +759,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                           ),
                         )
                       ),
-//
+
                       new Container(margin: new EdgeInsets.all(18.0)),                  
                       new Text(
                         'Repouso2min',
@@ -829,15 +882,15 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                           ),
                         )
                       ),
-//
+
                       new Container(margin: new EdgeInsets.all(42.0)),
-//
+
                     ]
                   )
                 )
               ]
             ),
-//
+
             new Positioned(
               bottom: 16.0,
               left: 16.0,
@@ -873,7 +926,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                 )
               ),
             ),
-//
+
             new Positioned(
               bottom: 16.0,
               left: 90.0,
@@ -1011,11 +1064,11 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
                 )
               ),
             ),
-//
+
           ]
         )
       ),
-//
+
       new Page(
         icon: Icons.filter_4,
         widget: new ListView(
@@ -1042,48 +1095,112 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
               new InkWell(
                 onTap: () {
                   setState(() {
+                    if(_controllerNome.text.length == 0) { _controllerNome.text = ' ';}
                     String nome = _controllerNome.text;
+
+                    if(this.value.length == 0) { this.value = ' ';}
                     String genero = this.value;
+
+                    if(_controllerIdade.text.length == 0) { _controllerIdade.text = '0';}
                     int idade = int.parse(_controllerIdade.text);
+
+                    if(_controllerPeso.text.length == 0) { _controllerPeso.text = '0.0';}
                     double peso = double.parse(_controllerPeso.text);
+
+                    if(_controllerAltura.text.length == 0) { _controllerAltura.text = '0';}
                     int altura = int.parse(_controllerAltura.text);
                     
+                    if(_controllerPimax.text.length == 0) { _controllerPimax.text = '0.0';}
                     double pimax = double.parse(_controllerPimax.text);
+
+                    if(_controllerPemax.text.length == 0) { _controllerPemax.text = '0.0';}
                     double pemax = double.parse(_controllerPemax.text);
-                    double pimaxnormal = double.parse(_valueTextNormalPimax);
-                    double pemaxnormal = double.parse(_valueTextNormalPemax);
+
+                    if(_valueTextNormalPimax.length == 0) { _valueTextNormalPimax = '0.0';}
+                    double pimaxnormal = double.parse(_valueTextNormalPimax.replaceAll(',', '.'));
+
+                    if(_valueTextNormalPemax.length == 0) { _valueTextNormalPemax = '0.0';}
+                    double pemaxnormal = double.parse(_valueTextNormalPemax.replaceAll(',', '.'));
                     
+                    if(_controllerFCRepouso.text.length == 0) { _controllerFCRepouso.text = '0';}
                     int repousofc = int.parse(_controllerFCRepouso.text);
+
+                    if(_controllerFRRepouso.text.length == 0) { _controllerFRRepouso.text = '0';}
                     int repousofr = int.parse(_controllerFRRepouso.text);
+
+                    if(_controllerSpO2Repouso.text.length == 0) { _controllerSpO2Repouso.text = '0';}
                     int repousospo = int.parse(_controllerSpO2Repouso.text);
+
+                    if(_controllerPARepouso.text.length == 0) { _controllerPARepouso.text = '0';}
                     String repousopa = _controllerPARepouso.text;
+
+                    if(_controllerBorgDRepouso.text.length == 0) { _controllerBorgDRepouso.text = '0';}
                     int repousobrogd = int.parse(_controllerBorgDRepouso.text);
+
+                    if(_controllerBorgMMIIRepouso.text.length == 0) { _controllerBorgMMIIRepouso.text = '0';}
                     int repousommii = int.parse(_controllerBorgMMIIRepouso.text);
+
+                    if(_controllerOxigenioRepouso.text.length == 0) { _controllerOxigenioRepouso.text = '0';}
                     String repousooxigenio = _controllerOxigenioRepouso.text;
 
+                    if(_controllerFC3min.text.length == 0) { _controllerFC3min.text = '0';}
                     int min3fc = int.parse(_controllerFC3min.text);
-                    int min3spo = int.parse(_controllerSpO23min.text);
-                    String min3oxigenio = _controllerOxigenio3min.text;
 
+                    if(_controllerSpO23min.text.length == 0) { _controllerSpO23min.text = '0';}
+                    int min3spo = int.parse(_controllerSpO23min.text);
+
+                    if(_controllerOxigenio3min.text.length == 0) { _controllerOxigenio3min.text = '0';}
+                    String min3oxigenio = _controllerOxigenio3min.text;
+                    
+                    if(_controllerFC6min.text.length == 0) { _controllerFC6min.text = '0';}
                     int min6fc = int.parse(_controllerFC6min.text);
+
+                    if(_controllerFR6min.text.length == 0) { _controllerFR6min.text = '0';}
                     int min6fr = int.parse(_controllerFR6min.text);
+
+                    if(_controllerSpO26min.text.length == 0) { _controllerSpO26min.text = '0';}
                     int min6spo = int.parse(_controllerSpO26min.text);
+
+                    if(_controllerPA6min.text.length == 0) { _controllerPA6min.text = '0';}
                     String min6pa = _controllerPA6min.text;
+
+                    if(_controllerBorgD6min.text.length == 0) { _controllerBorgD6min.text = '0';}
                     int min6brogd = int.parse(_controllerBorgD6min.text);
+
+                    if(_controllerBorgMMII6min.text.length == 0) { _controllerBorgMMII6min.text = '0';}
                     int min6mmii = int.parse(_controllerBorgMMII6min.text);
+
+                    if(_controllerOxigenio6min.text.length == 0) { _controllerOxigenio6min.text = '0';}
                     String min6oxigenio = _controllerOxigenio6min.text;
 
+                    if(_controllerFCRepouso2min.text.length == 0) { _controllerFCRepouso2min.text = '0';}
                     int repouso2fc = int.parse(_controllerFCRepouso2min.text);
+
+                    if(_controllerFRRepouso2min.text.length == 0) { _controllerFRRepouso2min.text = '0';}
                     int repouso2fr = int.parse(_controllerFRRepouso2min.text);
+
+                    if(_controllerSpO2Repouso2min.text.length == 0) { _controllerSpO2Repouso2min.text = '0';}
                     int repouso2spo = int.parse(_controllerSpO2Repouso2min.text);
+
+                    if(_controllerPARepouso2min.text.length == 0) { _controllerPARepouso2min.text = '0';}
                     String repouso2pa = _controllerPARepouso2min.text;
+
+                    if(_controllerBorgDRepouso2min.text.length == 0) { _controllerBorgDRepouso2min.text = '0';}
                     int repouso2brogd = int.parse(_controllerBorgDRepouso2min.text);
+
+                    if(_controllerBorgMMIIRepouso2min.text.length == 0) { _controllerBorgMMIIRepouso2min.text = '0';}
                     int repouso2mmii = int.parse(_controllerBorgMMIIRepouso2min.text);
+
+                    if(_controllerOxigenioRepouso2min.text.length == 0) { _controllerOxigenioRepouso2min.text = '0';}
                     String repouso2oxigenio = _controllerOxigenioRepouso2min.text;
 
                     int distancia = this.numeroDistancia;
-                    double tc6min = double.parse(this.estimativaDistanciaTC6MString);
-                    double vo2pico = double.parse(this.vo2PicoString);
+
+                    if(this.estimativaDistanciaTC6MString.length == 0) { this.estimativaDistanciaTC6MString = '0.0';}
+                    double tc6min = double.parse(this.estimativaDistanciaTC6MString.replaceAll(',', '.'));
+
+                    if(this.vo2PicoString.length == 0) { this.vo2PicoString = '0.0';}
+                    double vo2pico = double.parse(this.vo2PicoString.replaceAll(',', '.'));
 
                     Map form = {
                       'nome': nome,
@@ -1126,15 +1243,51 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
 
                     bancoDadosDB.insertForm(form).then((data) {
                       if(data) {
-                        Scaffold.of(context).showSnackBar(const SnackBar(
-                          content: const Text('Salvo com sucesso!')
-                          )
-                        );
+                        showInSnackBar('Salvo com sucesso!');
 
+                        sendEmail(this.email, this.header);
 
+                        setState(() {
+                          _controllerNome.text = '';
+                          this.value = 'Homem';
+                          _controllerIdade.text = '';
+                          _controllerPeso.text = '';
+                          _controllerAltura.text = '';
+                          _controllerPimax.text = '';
+                          _controllerPemax.text = '';
+                          _valueTextNormalPimax = '';
+                          _valueTextNormalPemax = '';
+                          _controllerFCRepouso.text = '';
+                          _controllerFRRepouso.text = '';
+                          _controllerSpO2Repouso.text = '';
+                          _controllerPARepouso.text = '';
+                          _controllerBorgDRepouso.text = '';
+                          _controllerBorgMMIIRepouso.text = '';
+                          _controllerOxigenioRepouso.text = '';
+                          _controllerFC3min.text = '';
+                          _controllerSpO23min.text = '';
+                          _controllerOxigenio3min.text = '';
+                          _controllerFC6min.text = '';
+                          _controllerFR6min.text = '';
+                          _controllerSpO26min.text = '';
+                          _controllerPA6min.text = '';
+                          _controllerBorgD6min.text = '';
+                          _controllerBorgMMII6min.text = '';
+                          _controllerOxigenio6min.text = '';
+                          _controllerFCRepouso2min.text = '';
+                          _controllerFRRepouso2min.text = '';
+                          _controllerSpO2Repouso2min.text = '';
+                          _controllerPARepouso2min.text = '';
+                          _controllerBorgDRepouso2min.text = '';
+                          _controllerBorgMMIIRepouso2min.text = '';
+                          _controllerOxigenioRepouso2min.text = '';
+                          this.numeroDistancia = 0;
+                          this.estimativaDistanciaTC6MString = '';
+                          this.vo2PicoString = '';
+                        });
                       }
                     });
-                  });                  
+                  });
                 },
                 child: new Container(
                   margin: new EdgeInsets.only(top:4.0, bottom: 4.0, left: 8.0, right: 8.0),
@@ -1169,26 +1322,26 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
         )
       )
     ];
-
     
     
-    //Decoration getIndicator() {
-    //  return new ShapeDecoration(
-    //    shape: const CircleBorder(
-    //      side: const BorderSide(
-    //        color: Colors.white24,
-    //        width: 4.0,
-    //      ),
-    //    ) + const CircleBorder(
-    //      side: const BorderSide(
-    //        color: Colors.transparent,
-    //        width: 4.0,
-    //      ),
-    //    ),
-    //  );
-    //}
+    Decoration getIndicator() {
+      return new ShapeDecoration(
+        shape: const RoundedRectangleBorder( //CircleBorder
+          side: const BorderSide(
+            color: Colors.white24,
+            width: 4.0,
+          ),
+        ) + const RoundedRectangleBorder( //CircleBorder
+          side: const BorderSide(
+            color: Colors.transparent,
+            width: 4.0,
+          ),
+        ),
+      );
+    }
 
     var formApp = new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: new Text('Fisioterapia'),
         //leading: new Container(),
@@ -1197,7 +1350,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
         bottom: new TabBar(
           controller: _controller,
           isScrollable: true,
-          //indicator: getIndicator(),
+          indicator: getIndicator(),
           tabs: <Widget>[
             new Container(
               padding: new EdgeInsets.all(8.0),

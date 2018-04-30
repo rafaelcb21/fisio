@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "469737713320",
-    "firebase_url": "https://fisio-183ec.firebaseio.com",
-    "project_id": "fisio-183ec",
-    "storage_bucket": "fisio-183ec.appspot.com"
+    "project_number": "808164970622",
+    "firebase_url": "https://fisioterapia-b1d44.firebaseio.com",
+    "project_id": "fisioterapia-b1d44",
+    "storage_bucket": "fisioterapia-b1d44.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:469737713320:android:82c557fe116d5a17",
+        "mobilesdk_app_id": "1:808164970622:android:7fb2475f02879429",
         "android_client_info": {
-          "package_name": "com.example.fisio"
+          "package_name": "com.corporation.fisio"
         }
       },
       "oauth_client": [
         {
-          "client_id": "469737713320-smpkg07gnrbloehtb9njekibtd1hhfko.apps.googleusercontent.com",
+          "client_id": "808164970622-b9b86gtdp4e8baldut48dpgo0a54lv7u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.fisio",
+            "package_name": "com.corporation.fisio",
             "certificate_hash": "f10a5fb3b955ee0136ce1ca9d141174b6b27c457"
           }
         },
         {
-          "client_id": "469737713320-18k78i5u7slu8pslfrs2v16itkaenakb.apps.googleusercontent.com",
+          "client_id": "808164970622-to73mq679n5mjcu1u1h74aju5u5e42ea.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBq0dLhE6WnguBKXy2ONNjL5Va6uZkJ3nk"
+          "current_key": "AIzaSyCJ88aN906hjr-td-01IYR2jxns5j2_OlA"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "469737713320-18k78i5u7slu8pslfrs2v16itkaenakb.apps.googleusercontent.com",
+              "client_id": "808164970622-to73mq679n5mjcu1u1h74aju5u5e42ea.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

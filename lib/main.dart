@@ -4,18 +4,18 @@ import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'formulario.dart';
 import 'dbsqlite.dart';
-
+//import "package:http/http.dart" as http;
+//import 'dart:convert' show json;
 
 GoogleSignIn googleSignIn = new GoogleSignIn(
   scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
+    'https://www.googleapis.com/auth/gmail.send'
   ],
 );
 
 Future<Null> handleSignOut() async {
-    googleSignIn.disconnect();
-  }
+  googleSignIn.signOut();
+}
 
 void main() {
   runApp(new FisioApp());
@@ -46,11 +46,22 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     db.create().then((data) {
-      bancoDadosDB.getLogin().then((data) {
-        if(data == true) {
-          Navigator.pushReplacementNamed(context, '/formulario');
-        }
-      });
+      googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+        setState(() {
+          account.authHeaders.then((result) {
+            print(account.email);
+            print([result['Authorization'], result['X-Goog-AuthUser']]);
+            //var header = {'Authorization': result['Authorization'], 'X-Goog-AuthUser': result['X-Goog-AuthUser']}; 
+            print(account);
+            if (account != null) {
+              bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
+              Navigator.pushReplacementNamed(context, '/formulario');
+            }
+          });
+        });
+      }
+    );
+    googleSignIn.signInSilently();
     });
     
   }
@@ -78,12 +89,13 @@ class LoginPageState extends State<LoginPage> {
                   child: new InkWell(
                     onTap: () async {
                       try {
-                        await googleSignIn.signIn().then((data) {
-                          print(data);
-                          bancoDadosDB.insertLogin(data.displayName, data.email);
-                          Navigator.pushReplacementNamed(context, '/formulario');
-                          //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
+                        await googleSignIn.signIn().then((account) {
+                          account.authHeaders.then((result) {                            
+                            bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
+                            Navigator.pushReplacementNamed(context, '/formulario');
+                          });                          
                         });
+                          //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
                       } catch (error) {
                         print(error);
                       }
@@ -115,3 +127,4 @@ class LoginPageState extends State<LoginPage> {
     return loginPage;
   }
 }
+

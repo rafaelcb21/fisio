@@ -1,4 +1,4 @@
-package com.example.fisio;
+package com.corporation.fisio;
 
 import android.os.Bundle;
 
