@@ -6,6 +6,7 @@ import 'dbsqlite.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'pacientes.dart';
 
 class Page {
   const Page({ this.icon, this.widget });
@@ -1349,6 +1350,33 @@ ${message}''';
     var formApp = new Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
+        actions: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.person),
+            onPressed: () async {
+              await Navigator.of(context).push(new PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) {
+                  return new PacientesPage(email:this.email, header: this.header);
+                },
+                transitionsBuilder: (
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child,
+                ) {
+                  return new SlideTransition(
+                    position: new Tween<Offset>(
+                      begin:  const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                }
+              ));
+            },
+          ),
+        ],
         title: new Text('Fisioterapia'),
         //leading: new Container(),
         automaticallyImplyLeading: false,

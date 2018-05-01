@@ -78,16 +78,14 @@ class BancoDados {
   BancoDados();
   Database db;
 
-  //Future getLogin() async {
-  //  Directory path = await getApplicationDocumentsDirectory();
-  //  String dbPath = join(path.path, "database.db");
-  //  Database db = await openDatabase(dbPath);
-  //  List results = await db.rawQuery("SELECT * FROM login");
-  //  Map<String, String> header = {'Authorization': results[0]['accesstoken'].toString(), 'X-Goog-AuthUser': results[0]['authuser'].toString()};
-  //  String email = results[0]['email'];
-  //  await db.close();
-  //  return [email, header];
-  //}
+  Future getTodosPacientes() async {
+    Directory path = await getApplicationDocumentsDirectory();
+    String dbPath = join(path.path, "database.db");
+    Database db = await openDatabase(dbPath);
+    List results = await db.rawQuery("SELECT id, nome, data FROM formulario");
+    await db.close();
+    return results;
+  }
 
   //Future insertLogin(String user, String email, String accesstoken, String authuser) async {
   //  Directory path = await getApplicationDocumentsDirectory();
@@ -100,14 +98,14 @@ class BancoDados {
   //  return true;
   //}
 
-  //Future deleteLogin() async {
-  //  Directory path = await getApplicationDocumentsDirectory();
-  //  String dbPath = join(path.path, "database.db");
-  //  Database db = await openDatabase(dbPath);
-  //  await db.rawDelete("DELETE FROM login");        
-  //  await db.close();
-  //  return true;
-  //}
+  Future deletePaciente(id) async {
+    Directory path = await getApplicationDocumentsDirectory();
+    String dbPath = join(path.path, "database.db");
+    Database db = await openDatabase(dbPath);
+    await db.rawDelete("DELETE FROM formulario WHERE id = ?", [id]);        
+    await db.close();
+    return true;
+  }
 
   Future insertForm(Map form) async {
     Directory path = await getApplicationDocumentsDirectory();
