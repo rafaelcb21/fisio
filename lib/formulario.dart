@@ -1109,19 +1109,19 @@ ${message}''';
                     String genero = this.value;
 
                     if(_controllerIdade.text.length == 0) { _controllerIdade.text = '0';}
-                    int idade = int.parse(_controllerIdade.text);
+                    int idade = int.parse(_controllerIdade.text.replaceAll(',', '.'));
 
                     if(_controllerPeso.text.length == 0) { _controllerPeso.text = '0.0';}
-                    double peso = double.parse(_controllerPeso.text);
+                    double peso = double.parse(_controllerPeso.text.replaceAll(',', '.'));
 
                     if(_controllerAltura.text.length == 0) { _controllerAltura.text = '0';}
-                    int altura = int.parse(_controllerAltura.text);
+                    int altura = int.parse(_controllerAltura.text.replaceAll(',', '.'));
                     
                     if(_controllerPimax.text.length == 0) { _controllerPimax.text = '0.0';}
-                    double pimax = double.parse(_controllerPimax.text);
+                    double pimax = double.parse(_controllerPimax.text.replaceAll(',', '.'));
 
                     if(_controllerPemax.text.length == 0) { _controllerPemax.text = '0.0';}
-                    double pemax = double.parse(_controllerPemax.text);
+                    double pemax = double.parse(_controllerPemax.text.replaceAll(',', '.'));
 
                     if(_valueTextNormalPimax.length == 0) { _valueTextNormalPimax = '0.0';}
                     double pimaxnormal = double.parse(_valueTextNormalPimax.replaceAll(',', '.'));
@@ -1130,76 +1130,76 @@ ${message}''';
                     double pemaxnormal = double.parse(_valueTextNormalPemax.replaceAll(',', '.'));
                     
                     if(_controllerFCRepouso.text.length == 0) { _controllerFCRepouso.text = '0';}
-                    int repousofc = int.parse(_controllerFCRepouso.text);
+                    int repousofc = int.parse(_controllerFCRepouso.text.replaceAll(',', '.'));
 
                     if(_controllerFRRepouso.text.length == 0) { _controllerFRRepouso.text = '0';}
-                    int repousofr = int.parse(_controllerFRRepouso.text);
+                    int repousofr = int.parse(_controllerFRRepouso.text.replaceAll(',', '.'));
 
                     if(_controllerSpO2Repouso.text.length == 0) { _controllerSpO2Repouso.text = '0';}
-                    int repousospo = int.parse(_controllerSpO2Repouso.text);
+                    int repousospo = int.parse(_controllerSpO2Repouso.text.replaceAll(',', '.'));
 
                     if(_controllerPARepouso.text.length == 0) { _controllerPARepouso.text = '0';}
-                    String repousopa = _controllerPARepouso.text;
+                    String repousopa = _controllerPARepouso.text.replaceAll(',', '.');
 
                     if(_controllerBorgDRepouso.text.length == 0) { _controllerBorgDRepouso.text = '0';}
-                    int repousobrogd = int.parse(_controllerBorgDRepouso.text);
+                    int repousobrogd = int.parse(_controllerBorgDRepouso.text.replaceAll(',', '.'));
 
                     if(_controllerBorgMMIIRepouso.text.length == 0) { _controllerBorgMMIIRepouso.text = '0';}
-                    int repousommii = int.parse(_controllerBorgMMIIRepouso.text);
+                    int repousommii = int.parse(_controllerBorgMMIIRepouso.text.replaceAll(',', '.'));
 
                     if(_controllerOxigenioRepouso.text.length == 0) { _controllerOxigenioRepouso.text = '0';}
-                    String repousooxigenio = _controllerOxigenioRepouso.text;
+                    String repousooxigenio = _controllerOxigenioRepouso.text.replaceAll(',', '.');
 
                     if(_controllerFC3min.text.length == 0) { _controllerFC3min.text = '0';}
-                    int min3fc = int.parse(_controllerFC3min.text);
+                    int min3fc = int.parse(_controllerFC3min.text.replaceAll(',', '.'));
 
                     if(_controllerSpO23min.text.length == 0) { _controllerSpO23min.text = '0';}
-                    int min3spo = int.parse(_controllerSpO23min.text);
+                    int min3spo = int.parse(_controllerSpO23min.text.replaceAll(',', '.'));
 
                     if(_controllerOxigenio3min.text.length == 0) { _controllerOxigenio3min.text = '0';}
-                    String min3oxigenio = _controllerOxigenio3min.text;
+                    String min3oxigenio = _controllerOxigenio3min.text.replaceAll(',', '.');
                     
                     if(_controllerFC6min.text.length == 0) { _controllerFC6min.text = '0';}
-                    int min6fc = int.parse(_controllerFC6min.text);
+                    int min6fc = int.parse(_controllerFC6min.text.replaceAll(',', '.'));
 
                     if(_controllerFR6min.text.length == 0) { _controllerFR6min.text = '0';}
-                    int min6fr = int.parse(_controllerFR6min.text);
+                    int min6fr = int.parse(_controllerFR6min.text.replaceAll(',', '.'));
 
                     if(_controllerSpO26min.text.length == 0) { _controllerSpO26min.text = '0';}
-                    int min6spo = int.parse(_controllerSpO26min.text);
+                    int min6spo = int.parse(_controllerSpO26min.text.replaceAll(',', '.'));
 
                     if(_controllerPA6min.text.length == 0) { _controllerPA6min.text = '0';}
-                    String min6pa = _controllerPA6min.text;
+                    String min6pa = _controllerPA6min.text.replaceAll(',', '.');
 
                     if(_controllerBorgD6min.text.length == 0) { _controllerBorgD6min.text = '0';}
-                    int min6brogd = int.parse(_controllerBorgD6min.text);
+                    int min6brogd = int.parse(_controllerBorgD6min.text.replaceAll(',', '.'));
 
                     if(_controllerBorgMMII6min.text.length == 0) { _controllerBorgMMII6min.text = '0';}
-                    int min6mmii = int.parse(_controllerBorgMMII6min.text);
+                    int min6mmii = int.parse(_controllerBorgMMII6min.text.replaceAll(',', '.'));
 
                     if(_controllerOxigenio6min.text.length == 0) { _controllerOxigenio6min.text = '0';}
-                    String min6oxigenio = _controllerOxigenio6min.text;
+                    String min6oxigenio = _controllerOxigenio6min.text.replaceAll(',', '.');
 
                     if(_controllerFCRepouso2min.text.length == 0) { _controllerFCRepouso2min.text = '0';}
-                    int repouso2fc = int.parse(_controllerFCRepouso2min.text);
+                    int repouso2fc = int.parse(_controllerFCRepouso2min.text.replaceAll(',', '.'));
 
                     if(_controllerFRRepouso2min.text.length == 0) { _controllerFRRepouso2min.text = '0';}
-                    int repouso2fr = int.parse(_controllerFRRepouso2min.text);
+                    int repouso2fr = int.parse(_controllerFRRepouso2min.text.replaceAll(',', '.'));
 
                     if(_controllerSpO2Repouso2min.text.length == 0) { _controllerSpO2Repouso2min.text = '0';}
-                    int repouso2spo = int.parse(_controllerSpO2Repouso2min.text);
+                    int repouso2spo = int.parse(_controllerSpO2Repouso2min.text.replaceAll(',', '.'));
 
                     if(_controllerPARepouso2min.text.length == 0) { _controllerPARepouso2min.text = '0';}
-                    String repouso2pa = _controllerPARepouso2min.text;
+                    String repouso2pa = _controllerPARepouso2min.text.replaceAll(',', '.');
 
                     if(_controllerBorgDRepouso2min.text.length == 0) { _controllerBorgDRepouso2min.text = '0';}
-                    int repouso2brogd = int.parse(_controllerBorgDRepouso2min.text);
+                    int repouso2brogd = int.parse(_controllerBorgDRepouso2min.text.replaceAll(',', '.'));
 
                     if(_controllerBorgMMIIRepouso2min.text.length == 0) { _controllerBorgMMIIRepouso2min.text = '0';}
-                    int repouso2mmii = int.parse(_controllerBorgMMIIRepouso2min.text);
+                    int repouso2mmii = int.parse(_controllerBorgMMIIRepouso2min.text.replaceAll(',', '.'));
 
                     if(_controllerOxigenioRepouso2min.text.length == 0) { _controllerOxigenioRepouso2min.text = '0';}
-                    String repouso2oxigenio = _controllerOxigenioRepouso2min.text;
+                    String repouso2oxigenio = _controllerOxigenioRepouso2min.text.replaceAll(',', '.');
 
                     int distancia = this.numeroDistancia;
 
@@ -1466,6 +1466,7 @@ ${message}''';
               } else if(flag[0] == 3) {
                 this.editar = true;
                 bancoDadosDB.getFormulario(flag[1]).then((dados) {
+                  print(dados[0]);
                   var form = dados[0];
                   setState(() {
                     _controllerNome.text = form['nome'];
