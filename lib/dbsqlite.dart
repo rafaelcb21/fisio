@@ -87,6 +87,15 @@ class BancoDados {
     return results;
   }
 
+  Future getFormulario(id) async {
+    Directory path = await getApplicationDocumentsDirectory();
+    String dbPath = join(path.path, "database.db");
+    Database db = await openDatabase(dbPath);
+    List results = await db.rawQuery("SELECT * FROM formulario WHERE id = ?", [id]);
+    await db.close();
+    return results;
+  }
+
   //Future insertLogin(String user, String email, String accesstoken, String authuser) async {
   //  Directory path = await getApplicationDocumentsDirectory();
   //  String dbPath = join(path.path, "database.db");
@@ -237,6 +246,133 @@ class BancoDados {
     await db.close();       
     return true;
   }
+
+  Future updateForm(Map form) async {
+    Directory path = await getApplicationDocumentsDirectory();
+    String dbPath = join(path.path, "database.db");
+    Database db = await openDatabase(dbPath);
+
+    String nome = form['nome'];
+    String genero = form['genero'];
+    int idade = form['idade'];
+    double peso = form['peso'];
+    int altura = form['altura'];
+    double pimax = form['pimax'];
+    double pemax = form['pemax'];
+    double pimaxnormal = form['pimaxnormal'];
+    double pemaxnormal = form['pemaxnormal'];
+    int repousofc = form['repousofc'];
+    int repousofr = form['repousofr'];
+    int repousospo = form['repousospo'];
+    String repousopa = form['repousopa'];
+    int repousobrogd = form['repousobrogd'];
+    int repousommii = form['repousommii'];
+    String repousooxigenio = form['repousooxigenio'];
+    int min3fc = form['min3fc'];
+    int min3spo = form['min3spo'];
+    String min3oxigenio = form['min3oxigenio'];
+    int min6fc = form['min6fc'];
+    int min6fr = form['min6fr'];
+    int min6spo = form['min6spo'];
+    String min6pa = form['min6pa'];
+    int min6brogd = form['min6brogd'];
+    int min6mmii = form['min6mmii'];
+    String min6oxigenio = form['min6oxigenio'];
+    int repouso2fc = form['repouso2fc'];
+    int repouso2fr = form['repouso2fr'];
+    int repouso2spo = form['repouso2spo'];
+    String repouso2pa = form['repouso2pa'];
+    int repouso2brogd = form['repouso2brogd'];
+    int repouso2mmii = form['repouso2mmii'];
+    String repouso2oxigenio = form['repouso2oxigenio'];
+    int distancia = form['distancia'];
+    double tc6min = form['tc6min'];
+    double vo2pico = form['vo2pico'];
+    String data = form['data'];
+
+    await db.rawUpdate(
+      '''UPDATE formulario SET      
+        nome = ?,
+        genero = ?,
+        idade = ?,
+        peso = ?,
+        altura = ?,
+        pimax = ?,
+        pemax = ?,
+        pimaxnormal = ?,
+        pemaxnormal = ?,
+        repousofc = ?,
+        repousofr = ?,
+        repousospo = ?,
+        repousopa = ?,
+        repousobrogd = ?,
+        repousommii = ?,
+        repousooxigenio = ?,
+        min3fc = ?,
+        min3spo = ?,
+        min3oxigenio = ?,
+        min6fc = ?,
+        min6fr = ?,
+        min6spo = ?,
+        min6pa = ?,
+        min6brogd = ?,
+        min6mmii = ?,
+        min6oxigenio = ?,
+        repouso2fc = ?,
+        repouso2fr = ?,
+        repouso2spo = ?,
+        repouso2pa = ?,
+        repouso2brogd = ?,
+        repouso2mmii = ?,
+        repouso2oxigenio = ?,
+        distancia = ?,
+        tc6min = ?,
+        vo2pico = ?,
+        data = ?
+      WHERE id = ? ''', [
+        nome,
+        genero,
+        idade,
+        peso,
+        altura,
+        pimax,
+        pemax,
+        pimaxnormal,
+        pemaxnormal,
+        repousofc,
+        repousofr,
+        repousospo,
+        repousopa,
+        repousobrogd,
+        repousommii,
+        repousooxigenio,
+        min3fc,
+        min3spo,
+        min3oxigenio,
+        min6fc,
+        min6fr,
+        min6spo,
+        min6pa,
+        min6brogd,
+        min6mmii,
+        min6oxigenio,
+        repouso2fc,
+        repouso2fr,
+        repouso2spo,
+        repouso2pa,
+        repouso2brogd,
+        repouso2mmii,
+        repouso2oxigenio,
+        distancia,
+        tc6min,
+        vo2pico,
+        data
+      ]
+    );
+    await db.close();       
+    return true;
+  }
+  
 
   //Future getFavorito(String uuid) async {
   //  bool favorito = false;

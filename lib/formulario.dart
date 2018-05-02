@@ -113,6 +113,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   int numeroDistancia = 0;
   String email;
   Map header;
+  bool editar = false;
 
   @override
   void initState() {
@@ -139,7 +140,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   Future<Null> sendEmail(String userId, Map<String, String> cabecalho) async {
     cabecalho['Accept'] = 'application/json';
     cabecalho['Content-type'] = 'application/json';
-
+    //https://github.com/kaisellgren/mailer
     var from = userId;
     var to = userId;
     var subject = 'test send email';
@@ -394,12 +395,12 @@ ${message}''';
                     onTap: () {
                       setState(() {
                         if(this.value == 'Homem') {
-                          double pimaxCalc = -0.8 * int.parse(_controllerIdade.text) + 155.3;                        
+                          double pimaxCalc = -1*(-0.8 * int.parse(_controllerIdade.text) + 155.3);                        
                           double pemaxCalc = -0.81 * int.parse(_controllerIdade.text) + 165.3;
                           _valueTextNormalPimax = pimaxCalc.toStringAsFixed(2).toString().replaceAll('.', ',');
                           _valueTextNormalPemax = pemaxCalc.toStringAsFixed(2).toString().replaceAll('.', ',');
                         } else {
-                          double pimaxCalc = -0.49 * int.parse(_controllerIdade.text) + 110.4;
+                          double pimaxCalc = -1*(-0.49 * int.parse(_controllerIdade.text) + 110.4);
                           double pemaxCalc = -0.61 * int.parse(_controllerIdade.text) + 115.6;
                           _valueTextNormalPimax = pimaxCalc.toStringAsFixed(2).toString().replaceAll('.', ',');
                           _valueTextNormalPemax = pemaxCalc.toStringAsFixed(2).toString().replaceAll('.', ',');
@@ -1248,52 +1249,97 @@ ${message}''';
                       'data': new DateFormat("yyyy-MM-dd").format(new DateTime.now())               
                     };
 
-                    bancoDadosDB.insertForm(form).then((data) {
-                      if(data) {
-                        showInSnackBar('Salvo com sucesso!');
-
-                        sendEmail(this.email, this.header);
-
-                        setState(() {
-                          _controllerNome.text = '';
-                          this.value = 'Homem';
-                          _controllerIdade.text = '';
-                          _controllerPeso.text = '';
-                          _controllerAltura.text = '';
-                          _controllerPimax.text = '';
-                          _controllerPemax.text = '';
-                          _valueTextNormalPimax = '';
-                          _valueTextNormalPemax = '';
-                          _controllerFCRepouso.text = '';
-                          _controllerFRRepouso.text = '';
-                          _controllerSpO2Repouso.text = '';
-                          _controllerPARepouso.text = '';
-                          _controllerBorgDRepouso.text = '';
-                          _controllerBorgMMIIRepouso.text = '';
-                          _controllerOxigenioRepouso.text = '';
-                          _controllerFC3min.text = '';
-                          _controllerSpO23min.text = '';
-                          _controllerOxigenio3min.text = '';
-                          _controllerFC6min.text = '';
-                          _controllerFR6min.text = '';
-                          _controllerSpO26min.text = '';
-                          _controllerPA6min.text = '';
-                          _controllerBorgD6min.text = '';
-                          _controllerBorgMMII6min.text = '';
-                          _controllerOxigenio6min.text = '';
-                          _controllerFCRepouso2min.text = '';
-                          _controllerFRRepouso2min.text = '';
-                          _controllerSpO2Repouso2min.text = '';
-                          _controllerPARepouso2min.text = '';
-                          _controllerBorgDRepouso2min.text = '';
-                          _controllerBorgMMIIRepouso2min.text = '';
-                          _controllerOxigenioRepouso2min.text = '';
-                          this.numeroDistancia = 0;
-                          this.estimativaDistanciaTC6MString = '';
-                          this.vo2PicoString = '';
-                        });
-                      }
-                    });
+                    if(!this.editar) {
+                      bancoDadosDB.insertForm(form).then((data) {
+                        if(data) {
+                          showInSnackBar('Salvo com sucesso!');
+                          sendEmail(this.email, this.header);
+                          setState(() {
+                            _controllerNome.text = '';
+                            this.value = 'Homem';
+                            _controllerIdade.text = '';
+                            _controllerPeso.text = '';
+                            _controllerAltura.text = '';
+                            _controllerPimax.text = '';
+                            _controllerPemax.text = '';
+                            _valueTextNormalPimax = '';
+                            _valueTextNormalPemax = '';
+                            _controllerFCRepouso.text = '';
+                            _controllerFRRepouso.text = '';
+                            _controllerSpO2Repouso.text = '';
+                            _controllerPARepouso.text = '';
+                            _controllerBorgDRepouso.text = '';
+                            _controllerBorgMMIIRepouso.text = '';
+                            _controllerOxigenioRepouso.text = '';
+                            _controllerFC3min.text = '';
+                            _controllerSpO23min.text = '';
+                            _controllerOxigenio3min.text = '';
+                            _controllerFC6min.text = '';
+                            _controllerFR6min.text = '';
+                            _controllerSpO26min.text = '';
+                            _controllerPA6min.text = '';
+                            _controllerBorgD6min.text = '';
+                            _controllerBorgMMII6min.text = '';
+                            _controllerOxigenio6min.text = '';
+                            _controllerFCRepouso2min.text = '';
+                            _controllerFRRepouso2min.text = '';
+                            _controllerSpO2Repouso2min.text = '';
+                            _controllerPARepouso2min.text = '';
+                            _controllerBorgDRepouso2min.text = '';
+                            _controllerBorgMMIIRepouso2min.text = '';
+                            _controllerOxigenioRepouso2min.text = '';
+                            this.numeroDistancia = 0;
+                            this.estimativaDistanciaTC6MString = '';
+                            this.vo2PicoString = '';
+                          });
+                        }
+                      });
+                    } else {
+                      bancoDadosDB.updateForm(form).then((data) {
+                        if(data) {
+                          showInSnackBar('Salvo com sucesso!');
+                          sendEmail(this.email, this.header);
+                          setState(() {
+                            _controllerNome.text = '';
+                            this.value = 'Homem';
+                            _controllerIdade.text = '';
+                            _controllerPeso.text = '';
+                            _controllerAltura.text = '';
+                            _controllerPimax.text = '';
+                            _controllerPemax.text = '';
+                            _valueTextNormalPimax = '';
+                            _valueTextNormalPemax = '';
+                            _controllerFCRepouso.text = '';
+                            _controllerFRRepouso.text = '';
+                            _controllerSpO2Repouso.text = '';
+                            _controllerPARepouso.text = '';
+                            _controllerBorgDRepouso.text = '';
+                            _controllerBorgMMIIRepouso.text = '';
+                            _controllerOxigenioRepouso.text = '';
+                            _controllerFC3min.text = '';
+                            _controllerSpO23min.text = '';
+                            _controllerOxigenio3min.text = '';
+                            _controllerFC6min.text = '';
+                            _controllerFR6min.text = '';
+                            _controllerSpO26min.text = '';
+                            _controllerPA6min.text = '';
+                            _controllerBorgD6min.text = '';
+                            _controllerBorgMMII6min.text = '';
+                            _controllerOxigenio6min.text = '';
+                            _controllerFCRepouso2min.text = '';
+                            _controllerFRRepouso2min.text = '';
+                            _controllerSpO2Repouso2min.text = '';
+                            _controllerPARepouso2min.text = '';
+                            _controllerBorgDRepouso2min.text = '';
+                            _controllerBorgMMIIRepouso2min.text = '';
+                            _controllerOxigenioRepouso2min.text = '';
+                            this.numeroDistancia = 0;
+                            this.estimativaDistanciaTC6MString = '';
+                            this.vo2PicoString = '';
+                          });
+                        }
+                      });
+                    }                    
                   });
                 },
                 child: new Container(
@@ -1354,7 +1400,7 @@ ${message}''';
           new IconButton(
             icon: new Icon(Icons.person),
             onPressed: () async {
-              await Navigator.of(context).push(new PageRouteBuilder(
+              List flag = await Navigator.of(context).push(new PageRouteBuilder(
                 opaque: false,
                 pageBuilder: (BuildContext context, _, __) {
                   return new PacientesPage(email:this.email, header: this.header);
@@ -1374,6 +1420,93 @@ ${message}''';
                   );
                 }
               ));
+
+              if(flag[0] == 1) { //editar formulario
+                this.editar = false;
+              } else if(flag[0] == 2) { //novo formulario, em branco
+                this.editar = false;
+                setState(() {
+                  _controllerNome.text = '';
+                  this.value = 'Homem';
+                  _controllerIdade.text = '';
+                  _controllerPeso.text = '';
+                  _controllerAltura.text = '';
+                  _controllerPimax.text = '';
+                  _controllerPemax.text = '';
+                  _valueTextNormalPimax = '';
+                  _valueTextNormalPemax = '';
+                  _controllerFCRepouso.text = '';
+                  _controllerFRRepouso.text = '';
+                  _controllerSpO2Repouso.text = '';
+                  _controllerPARepouso.text = '';
+                  _controllerBorgDRepouso.text = '';
+                  _controllerBorgMMIIRepouso.text = '';
+                  _controllerOxigenioRepouso.text = '';
+                  _controllerFC3min.text = '';
+                  _controllerSpO23min.text = '';
+                  _controllerOxigenio3min.text = '';
+                  _controllerFC6min.text = '';
+                  _controllerFR6min.text = '';
+                  _controllerSpO26min.text = '';
+                  _controllerPA6min.text = '';
+                  _controllerBorgD6min.text = '';
+                  _controllerBorgMMII6min.text = '';
+                  _controllerOxigenio6min.text = '';
+                  _controllerFCRepouso2min.text = '';
+                  _controllerFRRepouso2min.text = '';
+                  _controllerSpO2Repouso2min.text = '';
+                  _controllerPARepouso2min.text = '';
+                  _controllerBorgDRepouso2min.text = '';
+                  _controllerBorgMMIIRepouso2min.text = '';
+                  _controllerOxigenioRepouso2min.text = '';
+                  this.numeroDistancia = 0;
+                  this.estimativaDistanciaTC6MString = '';
+                  this.vo2PicoString = '';
+                });
+              } else if(flag[0] == 3) {
+                this.editar = true;
+                bancoDadosDB.getFormulario(flag[1]).then((dados) {
+                  var form = dados[0];
+                  setState(() {
+                    _controllerNome.text = form['nome'];
+                    this.value = form['genero'];
+                    _controllerIdade.text = form['idade'].toString();
+                    _controllerPeso.text = form['peso'].toString().replaceAll('.', ',');
+                    _controllerAltura.text = form['altura'].toString().replaceAll('.', ',');
+                    _controllerPimax.text = form['pimax'].toString().replaceAll('.', ',');
+                    _controllerPemax.text = form['pemax'].toString().replaceAll('.', ',');
+                    _valueTextNormalPimax = form['pimaxnormal'].toString().replaceAll('.', ',');
+                    _valueTextNormalPemax = form['pemaxnormal'].toString().replaceAll('.', ',');
+                    _controllerFCRepouso.text = form['repousofc'].toString().replaceAll('.', ',');
+                    _controllerFRRepouso.text = form['repousofr'].toString().replaceAll('.', ',');
+                    _controllerSpO2Repouso.text = form['repousospo'].toString().replaceAll('.', ',');
+                    _controllerPARepouso.text = form['repousopa'].toString().replaceAll('.', ',');
+                    _controllerBorgDRepouso.text = form['repousobrogd'].toString().replaceAll('.', ',');
+                    _controllerBorgMMIIRepouso.text = form['repousommii'].toString().replaceAll('.', ',');
+                    _controllerOxigenioRepouso.text = form['repousooxigenio'].toString().replaceAll('.', ',');
+                    _controllerFC3min.text = form['min3fc'].toString().replaceAll('.', ',');
+                    _controllerSpO23min.text = form['min3spo'].toString().replaceAll('.', ',');
+                    _controllerOxigenio3min.text = form['min3oxigenio'].toString().replaceAll('.', ',');
+                    _controllerFC6min.text = form['min6fc'].toString().replaceAll('.', ',');
+                    _controllerFR6min.text = form['min6fr'].toString().replaceAll('.', ',');
+                    _controllerSpO26min.text = form['min6spo'].toString().replaceAll('.', ',');
+                    _controllerPA6min.text = form['min6pa'].toString().replaceAll('.', ',');
+                    _controllerBorgD6min.text = form['min6brogd'].toString().replaceAll('.', ',');
+                    _controllerBorgMMII6min.text = form['min6mmii'].toString().replaceAll('.', ',');
+                    _controllerOxigenio6min.text = form['min6oxigenio'].toString().replaceAll('.', ',');
+                    _controllerFCRepouso2min.text = form['repouso2fc'].toString().replaceAll('.', ',');
+                    _controllerFRRepouso2min.text = form['repouso2fr'].toString().replaceAll('.', ',');
+                    _controllerSpO2Repouso2min.text = form['repouso2spo'].toString().replaceAll('.', ',');
+                    _controllerPARepouso2min.text = form['repouso2pa'].toString().replaceAll('.', ',');
+                    _controllerBorgDRepouso2min.text = form['repouso2brogd'].toString().replaceAll('.', ',');
+                    _controllerBorgMMIIRepouso2min.text = form['repouso2mmii'].toString().replaceAll('.', ',');
+                    _controllerOxigenioRepouso2min.text = form['repouso2oxigenio'].toString().replaceAll('.', ',');
+                    this.numeroDistancia = form['distancia'];
+                    this.estimativaDistanciaTC6MString = form['tc6min'].toString().replaceAll('.', ',');
+                    this.vo2PicoString = form['vo2pico'].toString().replaceAll('.', ',');
+                  });
+                });
+              }
             },
           ),
         ],

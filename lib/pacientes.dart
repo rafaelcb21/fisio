@@ -53,16 +53,16 @@ class PacientesPageState extends State<PacientesPage> {
         var id = i['id'];
         var nome = i['nome'];
         var data = i['data'];
-         DateTime x = DateTime.parse(data);
-        String dataFormatada = new DateFormat.yMd().format(x);
+        String dataFormatada = new DateFormat("dd-MM-yyyy").format(DateTime.parse(data));
         
         this.listaPacientes.add(
           new Paciente(
+            key: new ObjectKey(id),
             id: id,
             nome: nome,
             data: dataFormatada,
             onPressed: () {
-
+              Navigator.pop(context, [3, id]);
             },
             onPressedDelete: () async {
               void showDeleteDialog<T>({ BuildContext context, Widget child }) {
@@ -119,30 +119,18 @@ class PacientesPageState extends State<PacientesPage> {
 
     return new Scaffold(
       appBar: new AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context, [1]);
+          },
+        ),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(Icons.person_add),
-            onPressed: () async {
-              await Navigator.of(context).push(new PageRouteBuilder(
-                opaque: false,
-                pageBuilder: (BuildContext context, _, __) {
-                  return ;
-                },
-                transitionsBuilder: (
-                  BuildContext context,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation,
-                  Widget child,
-                ) {
-                  return new SlideTransition(
-                    position: new Tween<Offset>(
-                      begin:  const Offset(1.0, 0.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  );
-                }
-              ));
+            onPressed: () {
+              Navigator.pop(context, [2]);
             },
           ),
         ],
@@ -166,12 +154,13 @@ class Paciente extends StatefulWidget {
   final VoidCallback onPressedDelete;
 
   Paciente({
+    Key key,
     this.id,
     this.nome,
     this.data,
     this.onPressed,
     this.onPressedDelete
-  });
+  }) : super(key: key);
 
   @override
   PacienteState createState() => new PacienteState();
@@ -188,6 +177,7 @@ class PacienteState extends State<Paciente> {
   @override
   Widget build(BuildContext context) {
     return new Container(
+      padding: new EdgeInsets.only(left: 16.0),
       decoration: new BoxDecoration(
         color: new Color(0xFFFAFAFA),
         border: new Border(
@@ -198,12 +188,12 @@ class PacienteState extends State<Paciente> {
         )
       ),
       child: new Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           new Expanded(
             child: new InkWell(
               onTap: widget.onPressed,
               child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[                  
                   new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +203,7 @@ class PacienteState extends State<Paciente> {
                         style: new TextStyle(
                           color: Colors.black87,
                           fontFamily: "Roboto",
-                          fontSize: 14.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.w500,
                           textBaseline: TextBaseline.alphabetic                        
                         ),
@@ -223,7 +213,7 @@ class PacienteState extends State<Paciente> {
                         style: new TextStyle(
                           color: Colors.black54,
                           fontFamily: "Roboto",
-                          fontSize: 12.0,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.w400,
                           textBaseline: TextBaseline.alphabetic
                         ),
@@ -231,7 +221,11 @@ class PacienteState extends State<Paciente> {
                     ],
                   ),
                   new IconButton(
-                    icon:  new Icon(Icons.delete_forever, color : Colors.red),
+                    icon:  new Icon(
+                      Icons.delete_forever,
+                      color : Colors.red,
+                      size: 28.0,
+                    ),
                     onPressed: widget.onPressedDelete,
                   ),
                 ],
