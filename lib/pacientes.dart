@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dbsqlite.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 enum DialogOptionsAction {
   cancel,
@@ -24,6 +25,7 @@ class PacientesPageState extends State<PacientesPage> {
   String email;
   Map header;
   BancoDados bancoDadosDB = new BancoDados();
+  var uuid = new Uuid();
 
   Paciente pacienteDB = new Paciente();
   List<Widget> listaPacientes = [];
@@ -138,6 +140,7 @@ class PacientesPageState extends State<PacientesPage> {
         backgroundColor: Colors.pink[400],
       ),
       body: new ListView(
+        key: new Key(uuid.v4()),
         padding: new EdgeInsets.only(top: 8.0, right: 0.0, left: 0.0),
         children: buildListaPacientes(this.listaDB)
       )

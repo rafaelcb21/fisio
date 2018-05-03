@@ -114,6 +114,7 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
   String email;
   Map header;
   bool editar = false;
+  int idEditar;
 
   @override
   void initState() {
@@ -1295,7 +1296,7 @@ ${message}''';
                         }
                       });
                     } else {
-                      bancoDadosDB.updateForm(form).then((data) {
+                      bancoDadosDB.updateForm(form, this.idEditar).then((data) {
                         if(data) {
                           showInSnackBar('Salvo com sucesso!');
                           sendEmail(this.email, this.header);
@@ -1421,7 +1422,7 @@ ${message}''';
                 }
               ));
 
-              if(flag[0] == 1) { //editar formulario
+              if(flag[0] == 1) { // formulario
                 this.editar = false;
               } else if(flag[0] == 2) { //novo formulario, em branco
                 this.editar = false;
@@ -1463,12 +1464,13 @@ ${message}''';
                   this.estimativaDistanciaTC6MString = '';
                   this.vo2PicoString = '';
                 });
-              } else if(flag[0] == 3) {
+              } else if(flag[0] == 3) { //editar formulario
                 this.editar = true;
                 bancoDadosDB.getFormulario(flag[1]).then((dados) {
                   print(dados[0]);
                   var form = dados[0];
                   setState(() {
+                    this.idEditar = form['id'];
                     _controllerNome.text = form['nome'];
                     this.value = form['genero'];
                     _controllerIdade.text = form['idade'].toString();

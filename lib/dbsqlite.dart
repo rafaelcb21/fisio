@@ -247,12 +247,12 @@ class BancoDados {
     return true;
   }
 
-  Future updateForm(Map form) async {
+  Future updateForm(Map form, int id) async {
     Directory path = await getApplicationDocumentsDirectory();
     String dbPath = join(path.path, "database.db");
     Database db = await openDatabase(dbPath);
 
-    print(form);
+    print([form, id]);
 
     String nome = form['nome'];
     String genero = form['genero'];
@@ -368,7 +368,8 @@ class BancoDados {
         distancia,
         tc6min,
         vo2pico,
-        data
+        data,
+        id
       ]
     );
 
