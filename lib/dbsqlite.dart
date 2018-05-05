@@ -252,7 +252,7 @@ class BancoDados {
     String dbPath = join(path.path, "database.db");
     Database db = await openDatabase(dbPath);
 
-    print([form, id]);
+    //print([form, id]);
 
     String nome = form['nome'];
     String genero = form['genero'];
@@ -374,7 +374,7 @@ class BancoDados {
     );
 
     List results2 = await db.rawQuery("SELECT * FROM formulario WHERE id = 4");
-    print(results2);
+    //print(results2);
     await db.close();       
     return true;
   }

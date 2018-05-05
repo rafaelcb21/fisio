@@ -104,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
                         });
                           //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
                       } catch (error) {
-                        print(error);
+                        //print(error);
                       }
                     },
                     child: new Center(
