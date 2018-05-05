@@ -134,6 +134,13 @@ class FormPageState extends State<FormPage>  with SingleTickerProviderStateMixin
     super.dispose();
   }
 
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
+
   vo2Pico(int distancia) {
     this.vo2PicoString = ((0.03 * distancia) + 3.98).toStringAsFixed(2).toString().replaceAll('.', ',');  
   }
@@ -631,7 +638,7 @@ ${message}''';
                             focusNode: _focusNodeSpO23min,
                             style: Theme.of(context).textTheme.title,
                             decoration: new InputDecoration(
-                              labelText: "SpO2",
+                              labelText: "SpO2 (%)",
                               isDense: true,
                             ),
                           ),
@@ -705,7 +712,7 @@ ${message}''';
                             focusNode: _focusNodeSpO26min,
                             style: Theme.of(context).textTheme.title,
                             decoration: new InputDecoration(
-                              labelText: "SpO2",
+                              labelText: "SpO2 (%)",
                               isDense: true,
                             ),
                           ),
@@ -715,7 +722,7 @@ ${message}''';
                         child: new EnsureVisibleWhenFocused(
                           focusNode: _focusNodePA6min,            
                           child: new TextField(
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                             controller: _controllerPA6min,
                             maxLines: 1,
                             focusNode: _focusNodePA6min,
@@ -828,7 +835,7 @@ ${message}''';
                             focusNode: _focusNodeSpO2Repouso2min,
                             style: Theme.of(context).textTheme.title,
                             decoration: new InputDecoration(
-                              labelText: "SpO2",
+                              labelText: "SpO2 (%)",
                               isDense: true,
                             ),
                           ),
@@ -838,7 +845,7 @@ ${message}''';
                         child: new EnsureVisibleWhenFocused(
                           focusNode: _focusNodePARepouso2min,            
                           child: new TextField(
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                             controller: _controllerPARepouso2min,
                             maxLines: 1,
                             focusNode: _focusNodePARepouso2min,
@@ -1117,19 +1124,19 @@ ${message}''';
                   if(this.value.length == 0) { this.value = ' ';}
                   String genero = this.value;
 
-                  if(_controllerIdade.text.length == 0) { _controllerIdade.text = '0';}
+                  if(_controllerIdade.text.length == 0 || !isNumeric(_controllerIdade.text)) { _controllerIdade.text = '0';}
                   int idade = int.parse(_controllerIdade.text.replaceAll(',', '.'));
 
-                  if(_controllerPeso.text.length == 0) { _controllerPeso.text = '0.0';}
+                  if(_controllerPeso.text.length == 0 || !isNumeric(_controllerPeso.text)) { _controllerPeso.text = '0.0';}
                   double peso = double.parse(_controllerPeso.text.replaceAll(',', '.'));
 
-                  if(_controllerAltura.text.length == 0) { _controllerAltura.text = '0';}
+                  if(_controllerAltura.text.length == 0 || !isNumeric(_controllerAltura.text)) { _controllerAltura.text = '0';}
                   int altura = int.parse(_controllerAltura.text.replaceAll(',', '.'));
                   
-                  if(_controllerPimax.text.length == 0) { _controllerPimax.text = '0.0';}
+                  if(_controllerPimax.text.length == 0 || !isNumeric(_controllerPimax.text)) { _controllerPimax.text = '0.0';}
                   double pimax = double.parse(_controllerPimax.text.replaceAll(',', '.'));
 
-                  if(_controllerPemax.text.length == 0) { _controllerPemax.text = '0.0';}
+                  if(_controllerPemax.text.length == 0 || !isNumeric(_controllerPemax.text)) { _controllerPemax.text = '0.0';}
                   double pemax = double.parse(_controllerPemax.text.replaceAll(',', '.'));
 
                   if(_valueTextNormalPimax.length == 0) { _valueTextNormalPimax = '0.0';}
@@ -1138,76 +1145,76 @@ ${message}''';
                   if(_valueTextNormalPemax.length == 0) { _valueTextNormalPemax = '0.0';}
                   double pemaxnormal = double.parse(_valueTextNormalPemax.replaceAll(',', '.'));
                   
-                  if(_controllerFCRepouso.text.length == 0) { _controllerFCRepouso.text = '0';}
+                  if(_controllerFCRepouso.text.length == 0 || !isNumeric(_controllerFCRepouso.text)) { _controllerFCRepouso.text = '0';}
                   int repousofc = int.parse(_controllerFCRepouso.text.replaceAll(',', '.'));
 
-                  if(_controllerFRRepouso.text.length == 0) { _controllerFRRepouso.text = '0';}
+                  if(_controllerFRRepouso.text.length == 0 || !isNumeric(_controllerFRRepouso.text)) { _controllerFRRepouso.text = '0';}
                   int repousofr = int.parse(_controllerFRRepouso.text.replaceAll(',', '.'));
 
-                  if(_controllerSpO2Repouso.text.length == 0) { _controllerSpO2Repouso.text = '0';}
+                  if(_controllerSpO2Repouso.text.length == 0 || !isNumeric(_controllerSpO2Repouso.text)) { _controllerSpO2Repouso.text = '0';}
                   int repousospo = int.parse(_controllerSpO2Repouso.text.replaceAll(',', '.'));
 
                   if(_controllerPARepouso.text.length == 0) { _controllerPARepouso.text = '0';}
                   String repousopa = _controllerPARepouso.text.replaceAll(',', '.');
 
-                  if(_controllerBorgDRepouso.text.length == 0) { _controllerBorgDRepouso.text = '0';}
+                  if(_controllerBorgDRepouso.text.length == 0 || !isNumeric(_controllerBorgDRepouso.text)) { _controllerBorgDRepouso.text = '0';}
                   int repousobrogd = int.parse(_controllerBorgDRepouso.text.replaceAll(',', '.'));
 
-                  if(_controllerBorgMMIIRepouso.text.length == 0) { _controllerBorgMMIIRepouso.text = '0';}
+                  if(_controllerBorgMMIIRepouso.text.length == 0 || !isNumeric(_controllerBorgMMIIRepouso.text)) { _controllerBorgMMIIRepouso.text = '0';}
                   int repousommii = int.parse(_controllerBorgMMIIRepouso.text.replaceAll(',', '.'));
 
-                  if(_controllerOxigenioRepouso.text.length == 0) { _controllerOxigenioRepouso.text = '0';}
+                  if(_controllerOxigenioRepouso.text.length == 0 || !isNumeric(_controllerOxigenioRepouso.text)) { _controllerOxigenioRepouso.text = '0';}
                   String repousooxigenio = _controllerOxigenioRepouso.text.replaceAll(',', '.');
 
-                  if(_controllerFC3min.text.length == 0) { _controllerFC3min.text = '0';}
+                  if(_controllerFC3min.text.length == 0 || !isNumeric(_controllerFC3min.text)) { _controllerFC3min.text = '0';}
                   int min3fc = int.parse(_controllerFC3min.text.replaceAll(',', '.'));
 
-                  if(_controllerSpO23min.text.length == 0) { _controllerSpO23min.text = '0';}
+                  if(_controllerSpO23min.text.length == 0 || !isNumeric(_controllerSpO23min.text)) { _controllerSpO23min.text = '0';}
                   int min3spo = int.parse(_controllerSpO23min.text.replaceAll(',', '.'));
 
-                  if(_controllerOxigenio3min.text.length == 0) { _controllerOxigenio3min.text = '0';}
+                  if(_controllerOxigenio3min.text.length == 0 || !isNumeric(_controllerOxigenio3min.text)) { _controllerOxigenio3min.text = '0';}
                   String min3oxigenio = _controllerOxigenio3min.text.replaceAll(',', '.');
                   
-                  if(_controllerFC6min.text.length == 0) { _controllerFC6min.text = '0';}
+                  if(_controllerFC6min.text.length == 0 || !isNumeric(_controllerFC6min.text)) { _controllerFC6min.text = '0';}
                   int min6fc = int.parse(_controllerFC6min.text.replaceAll(',', '.'));
 
-                  if(_controllerFR6min.text.length == 0) { _controllerFR6min.text = '0';}
+                  if(_controllerFR6min.text.length == 0 || !isNumeric(_controllerFR6min.text)) { _controllerFR6min.text = '0';}
                   int min6fr = int.parse(_controllerFR6min.text.replaceAll(',', '.'));
 
-                  if(_controllerSpO26min.text.length == 0) { _controllerSpO26min.text = '0';}
+                  if(_controllerSpO26min.text.length == 0 || !isNumeric(_controllerSpO26min.text)) { _controllerSpO26min.text = '0';}
                   int min6spo = int.parse(_controllerSpO26min.text.replaceAll(',', '.'));
 
                   if(_controllerPA6min.text.length == 0) { _controllerPA6min.text = '0';}
                   String min6pa = _controllerPA6min.text.replaceAll(',', '.');
 
-                  if(_controllerBorgD6min.text.length == 0) { _controllerBorgD6min.text = '0';}
+                  if(_controllerBorgD6min.text.length == 0 || !isNumeric(_controllerBorgD6min.text)) { _controllerBorgD6min.text = '0';}
                   int min6brogd = int.parse(_controllerBorgD6min.text.replaceAll(',', '.'));
 
-                  if(_controllerBorgMMII6min.text.length == 0) { _controllerBorgMMII6min.text = '0';}
+                  if(_controllerBorgMMII6min.text.length == 0 || !isNumeric(_controllerBorgMMII6min.text)) { _controllerBorgMMII6min.text = '0';}
                   int min6mmii = int.parse(_controllerBorgMMII6min.text.replaceAll(',', '.'));
 
-                  if(_controllerOxigenio6min.text.length == 0) { _controllerOxigenio6min.text = '0';}
+                  if(_controllerOxigenio6min.text.length == 0 || !isNumeric(_controllerOxigenio6min.text)) { _controllerOxigenio6min.text = '0';}
                   String min6oxigenio = _controllerOxigenio6min.text.replaceAll(',', '.');
 
-                  if(_controllerFCRepouso2min.text.length == 0) { _controllerFCRepouso2min.text = '0';}
+                  if(_controllerFCRepouso2min.text.length == 0 || !isNumeric(_controllerFCRepouso2min.text)) { _controllerFCRepouso2min.text = '0';}
                   int repouso2fc = int.parse(_controllerFCRepouso2min.text.replaceAll(',', '.'));
 
-                  if(_controllerFRRepouso2min.text.length == 0) { _controllerFRRepouso2min.text = '0';}
+                  if(_controllerFRRepouso2min.text.length == 0 || !isNumeric(_controllerFRRepouso2min.text)) { _controllerFRRepouso2min.text = '0';}
                   int repouso2fr = int.parse(_controllerFRRepouso2min.text.replaceAll(',', '.'));
 
-                  if(_controllerSpO2Repouso2min.text.length == 0) { _controllerSpO2Repouso2min.text = '0';}
+                  if(_controllerSpO2Repouso2min.text.length == 0 || !isNumeric(_controllerSpO2Repouso2min.text)) { _controllerSpO2Repouso2min.text = '0';}
                   int repouso2spo = int.parse(_controllerSpO2Repouso2min.text.replaceAll(',', '.'));
 
                   if(_controllerPARepouso2min.text.length == 0) { _controllerPARepouso2min.text = '0';}
                   String repouso2pa = _controllerPARepouso2min.text.replaceAll(',', '.');
 
-                  if(_controllerBorgDRepouso2min.text.length == 0) { _controllerBorgDRepouso2min.text = '0';}
+                  if(_controllerBorgDRepouso2min.text.length == 0 || !isNumeric(_controllerBorgDRepouso2min.text)) { _controllerBorgDRepouso2min.text = '0';}
                   int repouso2brogd = int.parse(_controllerBorgDRepouso2min.text.replaceAll(',', '.'));
 
-                  if(_controllerBorgMMIIRepouso2min.text.length == 0) { _controllerBorgMMIIRepouso2min.text = '0';}
+                  if(_controllerBorgMMIIRepouso2min.text.length == 0 || !isNumeric(_controllerBorgMMIIRepouso2min.text)) { _controllerBorgMMIIRepouso2min.text = '0';}
                   int repouso2mmii = int.parse(_controllerBorgMMIIRepouso2min.text.replaceAll(',', '.'));
 
-                  if(_controllerOxigenioRepouso2min.text.length == 0) { _controllerOxigenioRepouso2min.text = '0';}
+                  if(_controllerOxigenioRepouso2min.text.length == 0 || !isNumeric(_controllerOxigenioRepouso2min.text)) { _controllerOxigenioRepouso2min.text = '0';}
                   String repouso2oxigenio = _controllerOxigenioRepouso2min.text.replaceAll(',', '.');
 
                   int distancia = this.numeroDistancia;
@@ -1674,40 +1681,40 @@ class HTMLForm {
 
     var nome = form['nome']; 
     var genero = form['genero']; 
-    var idade = form['idade']; 
-    var peso = form['peso']; 
-    var altura = form['altura']; 
-    var pimax = form['pimax']; 
-    var pemax = form['pemax']; 
-    var pimaxnormal = form['pimaxnormal']; 
-    var pemaxnormal = form['pemaxnormal']; 
-    var repousofc = form['repousofc']; 
-    var repousofr = form['repousofr']; 
-    var repousospo = form['repousospo']; 
-    var repousopa = form['repousopa']; 
-    var repousobrogd = form['repousobrogd']; 
-    var repousommii = form['repousommii']; 
-    var repousooxigenio = form['repousooxigenio']; 
-    var min3fc = form['min3fc']; 
-    var min3spo = form['min3spo']; 
-    var min3oxigenio = form['min3oxigenio']; 
-    var min6fc = form['min6fc']; 
-    var min6fr = form['min6fr']; 
-    var min6spo = form['min6spo']; 
-    var min6pa = form['min6pa']; 
-    var min6brogd = form['min6brogd']; 
-    var min6mmii = form['min6mmii']; 
-    var min6oxigenio = form['min6oxigenio']; 
-    var repouso2fc = form['repouso2fc']; 
-    var repouso2fr = form['repouso2fr']; 
-    var repouso2spo = form['repouso2spo']; 
-    var repouso2pa = form['repouso2pa']; 
-    var repouso2brogd = form['repouso2brogd']; 
-    var repouso2mmii = form['repouso2mmii']; 
-    var repouso2oxigenio = form['repouso2oxigenio']; 
-    var distancia = form['distancia']; 
-    var tc6min = form['tc6min']; 
-    var vo2pico = form['vo2pico'];
+    var idade = form['idade'].toString().replaceAll('.', ','); 
+    var peso = form['peso'].toString().replaceAll('.', ','); 
+    var altura = form['altura'].toString().replaceAll('.', ','); 
+    var pimax = form['pimax'].toString().replaceAll('.', ','); 
+    var pemax = form['pemax'].toString().replaceAll('.', ','); 
+    var pimaxnormal = form['pimaxnormal'].toString().replaceAll('.', ','); 
+    var pemaxnormal = form['pemaxnormal'].toString().replaceAll('.', ','); 
+    var repousofc = form['repousofc'].toString().replaceAll('.', ','); 
+    var repousofr = form['repousofr'].toString().replaceAll('.', ','); 
+    var repousospo = form['repousospo'].toString().replaceAll('.', ','); 
+    var repousopa = form['repousopa'].toString().replaceAll('.', ','); 
+    var repousobrogd = form['repousobrogd'].toString().replaceAll('.', ','); 
+    var repousommii = form['repousommii'].toString().replaceAll('.', ','); 
+    var repousooxigenio = form['repousooxigenio'].toString().replaceAll('.', ','); 
+    var min3fc = form['min3fc'].toString().replaceAll('.', ','); 
+    var min3spo = form['min3spo'].toString().replaceAll('.', ','); 
+    var min3oxigenio = form['min3oxigenio'].toString().replaceAll('.', ','); 
+    var min6fc = form['min6fc'].toString().replaceAll('.', ','); 
+    var min6fr = form['min6fr'].toString().replaceAll('.', ','); 
+    var min6spo = form['min6spo'].toString().replaceAll('.', ','); 
+    var min6pa = form['min6pa'].toString().replaceAll('.', ','); 
+    var min6brogd = form['min6brogd'].toString().replaceAll('.', ','); 
+    var min6mmii = form['min6mmii'].toString().replaceAll('.', ','); 
+    var min6oxigenio = form['min6oxigenio'].toString().replaceAll('.', ','); 
+    var repouso2fc = form['repouso2fc'].toString().replaceAll('.', ','); 
+    var repouso2fr = form['repouso2fr'].toString().replaceAll('.', ','); 
+    var repouso2spo = form['repouso2spo'].toString().replaceAll('.', ','); 
+    var repouso2pa = form['repouso2pa'].toString().replaceAll('.', ','); 
+    var repouso2brogd = form['repouso2brogd'].toString().replaceAll('.', ','); 
+    var repouso2mmii = form['repouso2mmii'].toString().replaceAll('.', ','); 
+    var repouso2oxigenio = form['repouso2oxigenio'].toString().replaceAll('.', ','); 
+    var distancia = form['distancia'].toString().replaceAll('.', ','); 
+    var tc6min = form['tc6min'].toString().replaceAll('.', ','); 
+    var vo2pico = form['vo2pico'].toString().replaceAll('.', ','); 
     var date = new DateFormat("dd/MM/yyyy").format(new DateTime.now());
 
 
