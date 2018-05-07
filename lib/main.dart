@@ -48,7 +48,8 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     db.create().then((data) {
-      googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {        
+      try {
+        googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {        
           account.authHeaders.then((result) {
             setState(() {
               //this.testeEmail = account.email;
@@ -66,12 +67,15 @@ class LoginPageState extends State<LoginPage> {
           }).catchError((error) {
             setState(() {
               this.testeEmail = error.toString();
-            }
-          );
+            });
+          });
+        });
+      } catch (error) {
+        setState(() {
+          this.testeEmail = error.toString();
         });
       }
-    );
-    googleSignIn.signInSilently();
+      googleSignIn.signInSilently();
     });
     
   }
@@ -124,7 +128,9 @@ class LoginPageState extends State<LoginPage> {
                         });
                           //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
                       } catch (error) {
-                        //print(error);
+                        setState(() {
+                          this.testeEmail = error.toString();
+                        });
                       }
                     },
                     child: new Center(

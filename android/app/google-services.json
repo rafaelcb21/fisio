@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "808164970622-6tk0ubg4gjg6qrtc6g9fq8v9c9vogj5j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.corporation.fisio",
+            "certificate_hash": "3e9c7fd662f88d6c5f858668d9b88841bc99d9f2"
+          }
+        },
+        {
           "client_id": "808164970622-b9b86gtdp4e8baldut48dpgo0a54lv7u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
