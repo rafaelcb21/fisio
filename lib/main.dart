@@ -41,30 +41,33 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   DatabaseClient db = new DatabaseClient();
   BancoDados bancoDadosDB = new BancoDados();
+  String testeEmail = '';
+  String testeAccount = '';
 
   @override
   void initState() {
     super.initState();
     db.create().then((data) {
-      googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-        setState(() {
+      googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {        
           account.authHeaders.then((result) {
-            //print(account.email);
-            //print([result['Authorization'], result['X-Goog-AuthUser']]);
-            var header = {'Authorization': result['Authorization'], 'X-Goog-AuthUser': result['X-Goog-AuthUser']}; 
-            //print(account);
-            if (account != null) {
-              //bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
-              //Navigator.pushReplacementNamed(context, '/formulario');
-
-              Navigator.of(context).pushReplacement(
-                new MaterialPageRoute(
-                  settings: const RouteSettings(name: '/formulario'),
-                  builder: (context) => new FormPage(email: account.email, header: header)
-                )
-              );
-             }
-          });
+            setState(() {
+              //this.testeEmail = account.email;
+              var header = {'Authorization': result['Authorization'], 'X-Goog-AuthUser': result['X-Goog-AuthUser']}; 
+              if (account != null) {
+                //this.testeAccount = 'true';
+                Navigator.of(context).pushReplacement(
+                  new MaterialPageRoute(
+                    settings: const RouteSettings(name: '/formulario'),
+                    builder: (context) => new FormPage(email: account.email, header: header)
+                  )
+                );
+              }
+            });
+          }).catchError((error) {
+            setState(() {
+              this.testeEmail = error.toString();
+            }
+          );
         });
       }
     );
@@ -98,8 +101,25 @@ class LoginPageState extends State<LoginPage> {
                       try {
                         await googleSignIn.signIn().then((account) {
                           account.authHeaders.then((result) {
-                            //bancoDadosDB.insertLogin(account.displayName, account.email, result['Authorization'], result['X-Goog-AuthUser']);
-                            //Navigator.pushReplacementNamed(context, '/formulario');
+                            setState(() {
+                              this.testeEmail = account.email;
+                              //print([result['Authorization'], result['X-Goog-AuthUser']]);
+                              var header = {'Authorization': result['Authorization'], 'X-Goog-AuthUser': result['X-Goog-AuthUser']}; 
+                              //print(account);
+                              if (account != null) {
+                                this.testeAccount = 'true';
+                                Navigator.of(context).pushReplacement(
+                                  new MaterialPageRoute(
+                                    settings: const RouteSettings(name: '/formulario'),
+                                    builder: (context) => new FormPage(email: account.email, header: header)
+                                  )
+                                );
+                              }
+                            });
+                          }).catchError((error) {
+                            setState(() {
+                              this.testeEmail = error.toString();
+                            });
                           });
                         });
                           //Navigator.pushNamedAndRemoveUntil(context, '/formulario', (_) => false);
@@ -119,6 +139,28 @@ class LoginPageState extends State<LoginPage> {
               margin: new EdgeInsets.only(top: 16.0),
               child: new Text(
                 'Entre com o Google',
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Futura",
+                  fontSize: 18.0
+                ),
+              ),
+            ),
+            new Container(
+              margin: new EdgeInsets.only(top: 16.0),
+              child: new Text(
+                this.testeEmail,
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Futura",
+                  fontSize: 18.0
+                ),
+              ),
+            ),
+            new Container(
+              margin: new EdgeInsets.only(top: 16.0),
+              child: new Text(
+                this.testeAccount,
                 style: new TextStyle(
                   color: Colors.white,
                   fontFamily: "Futura",
